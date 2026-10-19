@@ -1,0 +1,854 @@
+/* ==========================================================================
+   ChordMaster Live - Modern Mobile & Stage Stylesheet
+   ========================================================================== */
+
+/* Modern CSS Reset & Root Theme */
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #161f30;
+  --bg-card: #1c263c;
+  --bg-input: #23304b;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-gold: #f59e0b;
+  --accent-gold-hover: #fbbf24;
+  --accent-cyan: #38bdf8;
+  --accent-emerald: #10b981;
+  --accent-rose: #f43f5e;
+  --border-color: #334155;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-chords: 18px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* Light Theme Mode */
+body.theme-light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-input: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent-gold: #d97706;
+  --accent-gold-hover: #b45309;
+  --accent-cyan: #0284c7;
+  --border-color: #cbd5e1;
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  inline-size: 100%;
+  min-block-size: 100%;
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  user-select: text;
+}
+
+/* Base Layout Container */
+#app-container {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+  padding-block-end: 76px; /* space for bottom mobile navigation bar */
+}
+
+@media (min-width: 900px) {
+  #app-container {
+    padding-block-end: 0;
+  }
+}
+
+/* ==================== DIALOG COMPLIANCE (MODERN WEB GUIDANCE) ==================== */
+dialog:modal {
+  /* MANDATORY: Prevent scroll gestures inside the modal from chaining to page */
+  overscroll-behavior: contain;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-inline-size: min(92vw, 560px);
+  max-block-size: 85vh;
+  box-shadow: var(--shadow-lg);
+  margin: auto;
+}
+
+dialog::backdrop {
+  /* MANDATORY: Set overflow: hidden so ::backdrop becomes a non-scrollable scroll container */
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+/* ==================== TOP HEADER & NAVIGATION ==================== */
+.app-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+  background-color: rgba(11, 15, 25, 0.92);
+  backdrop-filter: blur(12px);
+  border-block-end: 1px solid var(--border-color);
+  padding-inline: 16px;
+  padding-block: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.brand-icon {
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: 8px;
+}
+
+/* Admin Status Badge */
+.admin-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding-inline: 8px;
+  padding-block: 4px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-badge.active {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.admin-badge.inactive {
+  background-color: rgba(148, 163, 184, 0.15);
+  color: var(--text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* ==================== SEARCH BAR & FILTER CHIPS ==================== */
+.search-container {
+  padding-inline: 16px;
+  padding-block: 16px 8px;
+  max-inline-size: 800px;
+  margin-inline: auto;
+  inline-size: 100%;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  inline-size: 100%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding-inline-start: 42px;
+  padding-inline-end: 40px;
+  padding-block: 12px;
+  font-size: 1rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.search-icon-left {
+  position: absolute;
+  inset-inline-start: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-clear-btn {
+  position: absolute;
+  inset-inline-end: 12px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* Filter Chips Horizontal Scroller */
+.filter-chips-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-block: 8px 4px;
+  scrollbar-width: none;
+}
+.filter-chips-row::-webkit-scrollbar {
+  display: none;
+}
+
+.chip-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding-inline: 14px;
+  padding-block: 6px;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip-btn.active {
+  background-color: var(--accent-cyan);
+  color: #0b0f19;
+  border-color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+/* ==================== SONG CARD LIST (GENERAL VIEW) ==================== */
+.songs-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding: 16px;
+  max-inline-size: 960px;
+  margin-inline: auto;
+  inline-size: 100%;
+}
+
+@media (min-width: 640px) {
+  .songs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .songs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.song-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.song-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.song-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-block-end: 4px;
+}
+
+.song-card-artist {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-block-end: 12px;
+}
+
+.song-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-start: auto;
+  padding-block-start: 12px;
+  border-block-start: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.key-pill {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  font-weight: 800;
+  padding-inline: 8px;
+  padding-block: 2px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.tempo-pill {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==================== SONG DETAIL & CHORDS VIEWER ==================== */
+.song-viewer-header {
+  background-color: var(--bg-secondary);
+  border-block-end: 1px solid var(--border-color);
+  padding: 16px;
+  position: sticky;
+  inset-block-start: 57px;
+  z-index: 30;
+}
+
+.song-viewer-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-block-end: 8px;
+}
+
+.viewer-song-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.viewer-song-artist {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* Transpose & Toolbar controls */
+.viewer-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding-block-start: 10px;
+  border-block-start: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.control-pill-group {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.control-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding-inline: 12px;
+  padding-block: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  min-inline-size: 38px;
+  min-block-size: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.control-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.control-label {
+  padding-inline: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+/* Capo Info Box */
+.capo-tag {
+  font-size: 0.8rem;
+  background-color: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding-inline: 8px;
+  padding-block: 4px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* ==================== CHORDS AND LYRICS RENDERING ==================== */
+.chords-sheet-content {
+  padding: 24px 16px 120px 16px;
+  max-inline-size: 860px;
+  margin-inline: auto;
+  font-size: var(--font-size-chords);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.section-badge {
+  display: inline-block;
+  background-color: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-inline: 10px;
+  padding-block: 3px;
+  border-radius: 6px;
+  margin-block-start: 22px;
+  margin-block-end: 12px;
+  font-family: var(--font-family);
+}
+
+.chord-lyric-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-block-end: 8px;
+}
+
+.chord-pair {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: bottom;
+  position: relative;
+}
+
+.chord-token {
+  font-size: 1.05em;
+  font-weight: 800;
+  color: var(--accent-gold);
+  line-height: 1.2;
+  cursor: pointer;
+  padding-inline-end: 2px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.chord-token:hover {
+  color: var(--accent-gold-hover);
+  text-decoration: underline;
+  background-color: rgba(245, 158, 11, 0.15);
+}
+
+.chord-spacer {
+  font-size: 1.05em;
+  line-height: 1.2;
+  visibility: hidden;
+}
+
+.lyric-token {
+  color: var(--text-primary);
+  line-height: 1.4;
+  white-space: pre;
+}
+
+.chord-line-break {
+  block-size: 14px;
+}
+
+/* ==================== FLOATING AUTO-SCROLL CONTROLLER ==================== */
+.floating-scroll-bar {
+  position: fixed;
+  inset-inline-end: 16px;
+  inset-block-end: 86px;
+  z-index: 50;
+  background-color: rgba(22, 31, 48, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-full);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .floating-scroll-bar {
+    inset-block-end: 24px;
+  }
+}
+
+.scroll-play-btn {
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+  color: #0b0f19;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease;
+}
+
+.scroll-play-btn.playing {
+  background-color: var(--accent-rose);
+}
+
+.scroll-slider {
+  inline-size: 80px;
+  accent-color: var(--accent-cyan);
+}
+
+.scroll-speed-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-inline-size: 26px;
+}
+
+/* ==================== PERSONAL & BAND NOTES DRAWER / TAB ==================== */
+.notes-container {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 16px;
+  max-inline-size: 860px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.notes-header-tabs {
+  display: flex;
+  border-block-end: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.notes-tab-btn {
+  flex: 1;
+  padding: 12px;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-align: center;
+  border-block-end: 2px solid transparent;
+}
+
+.notes-tab-btn.active {
+  color: var(--accent-cyan);
+  border-block-end-color: var(--accent-cyan);
+  background-color: var(--bg-card);
+}
+
+.notes-editor-textarea {
+  inline-size: 100%;
+  min-block-size: 120px;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: none;
+  padding: 14px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+}
+
+.notes-footer-status {
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-secondary);
+}
+
+/* ==================== SETLISTS VIEW & LIVE PERFORMANCE MODE ==================== */
+.setlist-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-block-end: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.setlist-card:hover {
+  border-color: var(--accent-gold);
+}
+
+.setlist-live-bar {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 45;
+  background-color: rgba(15, 23, 42, 0.98);
+  backdrop-filter: blur(12px);
+  border-block-start: 1px solid var(--border-color);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.live-nav-btn {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  min-inline-size: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.live-nav-btn:hover:not(:disabled) {
+  background-color: var(--accent-cyan);
+  color: #0b0f19;
+}
+
+.live-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ==================== BOTTOM MOBILE NAVIGATION BAR ==================== */
+.bottom-nav {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: 40;
+  background-color: rgba(11, 15, 25, 0.96);
+  backdrop-filter: blur(16px);
+  border-block-start: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
+  padding-block: 8px 10px;
+}
+
+@media (min-width: 900px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.nav-item.active {
+  color: var(--accent-cyan);
+}
+
+.nav-item svg {
+  inline-size: 22px;
+  block-size: 22px;
+}
+
+/* Desktop Sidebar for PC Admin View */
+@media (min-width: 900px) {
+  .desktop-layout-wrapper {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    min-block-size: calc(100vh - 65px);
+  }
+
+  .desktop-sidebar {
+    background-color: var(--bg-secondary);
+    border-inline-end: 1px solid var(--border-color);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* ==================== BUTTONS & FORM INPUTS ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background-color: var(--accent-cyan);
+  color: #0b0f19;
+}
+.btn-primary:hover {
+  background-color: #7dd3fc;
+}
+
+.btn-gold {
+  background-color: var(--accent-gold);
+  color: #0b0f19;
+}
+.btn-gold:hover {
+  background-color: var(--accent-gold-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+.btn-secondary:hover {
+  background-color: var(--bg-input);
+}
+
+.btn-danger {
+  background-color: rgba(244, 63, 94, 0.15);
+  color: var(--accent-rose);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+.btn-danger:hover {
+  background-color: var(--accent-rose);
+  color: white;
+}
+
+.form-group {
+  margin-block-end: 16px;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-block-end: 6px;
+}
+
+.form-input, .form-select, .form-textarea {
+  inline-size: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* Toast Notifications */
+.status-toast {
+  position: fixed;
+  inset-block-start: 20px;
+  inset-inline-end: 20px;
+  z-index: 100;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+.status-toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Floating Action Button (+ Add Song) */
+.fab-btn {
+  position: fixed;
+  inset-inline-end: 20px;
+  inset-block-end: 88px;
+  z-index: 42;
+  inline-size: 56px;
+  block-size: 56px;
+  border-radius: 50%;
+  background-color: var(--accent-cyan);
+  color: #0b0f19;
+  border: none;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.fab-btn:active {
+  transform: scale(0.95);
+}
+
+@media (min-width: 900px) {
+  .fab-btn {
+    inset-block-end: 28px;
+  }
+}

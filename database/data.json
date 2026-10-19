@@ -1,0 +1,112 @@
+{
+  "version": 4,
+  "lastModified": "2026-10-19T04:58:35.557Z",
+  "adminPin": "1234",
+  "songs": [
+    {
+      "id": "song-1",
+      "title": "Amazing Grace",
+      "artist": "John Newton",
+      "key": "G",
+      "tempo": 75,
+      "timeSignature": "3/4",
+      "tags": [
+        "Hymn",
+        "Acoustic",
+        "Traditional"
+      ],
+      "notes": "Acoustic fingerpicking intro. Build dynamics in verse 3.",
+      "content": "[Verse 1]\n[G]Amazing grace, how [C]sweet the [G]sound\nThat saved a wretch like [D]me\nI [G]once was lost, but [C]now am [G]found\nWas blind, but [D]now I [G]see\n\n[Verse 2]\n'Twas [G]grace that taught my [C]heart to [G]fear\nAnd grace my fears [D]relieved\nHow [G]precious did that [C]grace [G]appear\nThe hour I [D]first [G]believed\n\n[Chorus]\nMy [C]chains are gone, I've been [G]set free\nMy [C]God, my Savior has [G]ransomed [D]me\nAnd [C]like a flood, His [G]mercy [Em]reigns\nUn-[Am]ending love, a-[D]mazing [G]grace\n\n[Verse 3]\nThe [G]Lord has promised [C]good to [G]me\nHis word my hope [D]secures\nHe [G]will my shield and [C]portion [G]be\nAs long as [D]life [G]endures",
+      "updatedAt": "2026-10-19T04:58:01.477Z"
+    },
+    {
+      "id": "song-2",
+      "title": "Stand By Me",
+      "artist": "Ben E. King",
+      "key": "A",
+      "tempo": 118,
+      "timeSignature": "4/4",
+      "tags": [
+        "Soul",
+        "Classic",
+        "Pop"
+      ],
+      "notes": "Bass line: A - F#m - D - E. Electric guitar light palm muting.",
+      "content": "[Intro]\n[A]    [F#m]    [D]   [E]   [A]\n\n[Verse 1]\nWhen the [A]night has come\nAnd the [F#m]land is dark\nAnd the [D]moon is the [E]only light we'll [A]see\nNo, I [A]won't be afraid\nOh, I [F#m]won't be afraid\nJust as [D]long as you [E]stand, stand by [A]me\n\n[Chorus]\nSo darling, darling, [A]stand by me\nOh, [F#m]stand by me\nOh, [D]stand, [E]stand by me, [A]stand by me\n\n[Verse 2]\nIf the [A]sky that we look upon\n[F#m]Should tumble and fall\nOr the [D]mountain should [E]crumble to the [A]sea\nI won't [A]cry, I won't cry\nNo, I [F#m]won't shed a tear\nJust as [D]long as you [E]stand, stand by [A]me\n\n[Chorus]\nAnd darling, darling, [A]stand by me\nOh, [F#m]stand by me\nOh, [D]stand, [E]stand by me, [A]stand by me",
+      "updatedAt": "2026-10-19T04:58:01.478Z"
+    },
+    {
+      "id": "song-3",
+      "title": "Hallelujah",
+      "artist": "Leonard Cohen",
+      "key": "C",
+      "tempo": 56,
+      "timeSignature": "6/8",
+      "tags": [
+        "Acoustic",
+        "Ballad",
+        "Folk"
+      ],
+      "notes": "Arpeggiate chords smoothly: 1-2-3-4-5-6 in 6/8 time.",
+      "content": "[Intro]\n[C]   [Am]   [C]   [Am]\n\n[Verse 1]\nI've [C]heard there was a [Am]secret chord\nThat [C]David played, and it [Am]pleased the Lord\nBut [F]you don't really [G]care for music, [C]do you? [G]\nIt [C]goes like this, the [F]fourth, the [G]fifth\nThe [Am]minor fall, the [F]major lift\nThe [G]baffled king com-[E7]posing Halle-[Am]lujah\n\n[Chorus]\nHalle-[F]lujah, Halle-[Am]lujah\nHalle-[F]lujah, Halle-[C]lu---[G]--[C]jah\n\n[Verse 2]\nYour [C]faith was strong but you [Am]needed proof\nYou [C]saw her bathing [Am]on the roof\nHer [F]beauty and the [G]moonlight over-[C]threw you [G]\nShe [C]tied you to a [F]kitchen [G]chair\nShe [Am]broke your throne, and she [F]cut your hair\nAnd [G]from your lips she [E7]drew the Halle-[Am]lujah\n\n[Chorus]\nHalle-[F]lujah, Halle-[Am]lujah\nHalle-[F]lujah, Halle-[C]lu---[G]--[C]jah",
+      "updatedAt": "2026-10-19T04:58:01.478Z"
+    },
+    {
+      "id": "song-4",
+      "title": "De Música Ligera",
+      "artist": "Soda Stereo",
+      "key": "Bm",
+      "tempo": 126,
+      "timeSignature": "4/4",
+      "tags": [
+        "Rock",
+        "Latin",
+        "Spanish"
+      ],
+      "notes": "Main iconic riff: Bm - G - D - A. Drums drive with heavy hi-hat in choruses.",
+      "content": "[Intro]\n[Bm]   [G]   [D]   [A]  (x4)\n\n[Verse 1]\n[Bm]Ella durmió [G]al calor de las [D]masas [A]\n[Bm]Y yo desperté [G]queriendo so-[D]ñarla [A]\n[Bm]Algún tiempo atrás [G]pensé en escri-[D]birle [A]\n[Bm]Que nunca sorteé [G]las trampas del [D]amor [A]\n\n[Chorus]\nDe a-[Bm]quel amor [G]\nDe [D]música li-[A]gera\nNada [Bm]nos libra [G]\nNada [D]más que-[A]da\n\n[Verse 2]\n[Bm]No le enviaré [G]cenizas de [D]rosas [A]\n[Bm]Ni pienso evitar [G]un roce se-[D]creto [A]\n\n[Chorus]\nDe a-[Bm]quel amor [G]\nDe [D]música li-[A]gera\nNada [Bm]nos libra [G]\nNada [D]más que-[A]da\n\n[Outro]\n[Bm]   [G]   [D]   [A]\n¡Nada más queda! ¡Gracias totales!",
+      "updatedAt": "2026-10-19T04:58:01.478Z"
+    },
+    {
+      "id": "song-5",
+      "title": "Way Maker",
+      "artist": "Sinach",
+      "key": "E",
+      "tempo": 68,
+      "timeSignature": "4/4",
+      "tags": [
+        "Worship",
+        "Contemporary"
+      ],
+      "notes": "Capo 2 for guitar in D if preferred. Pad and piano start verse 1 soft.",
+      "content": "[Intro]\n[E]   [B]   [C#m]   [A]\n\n[Verse 1]\nYou are [E]here, moving in our [B]midst\nI worship [C#m]You, I worship [A]You\nYou are [E]here, working in this [B]place\nI worship [C#m]You, I worship [A]You\n\n[Chorus]\n[E]Way Maker, Miracle Worker, [B]Promise Keeper\nLight in the darkness, [C#m]my God, that is who You [A]are\n[E]Way Maker, Miracle Worker, [B]Promise Keeper\nLight in the darkness, [C#m]my God, that is who You [A]are\n\n[Verse 2]\nYou are [E]here, touching every [B]heart\nI worship [C#m]You, I worship [A]You\nYou are [E]here, healing every [B]heart\nI worship [C#m]You, I worship [A]You",
+      "updatedAt": "2026-10-19T04:58:01.478Z"
+    }
+  ],
+  "setlists": [
+    {
+      "id": "setlist-1",
+      "name": "Sunday Rehearsal & Live",
+      "description": "Main weekend set for full band",
+      "songIds": [
+        "song-5",
+        "song-1",
+        "song-3"
+      ],
+      "createdAt": "2026-10-19T04:58:01.478Z",
+      "updatedAt": "2026-10-19T04:58:01.478Z"
+    },
+    {
+      "id": "setlist-2",
+      "name": "Acoustic Night",
+      "description": "Unplugged acoustic set with guitar and vocal",
+      "songIds": [
+        "song-2",
+        "song-4",
+        "song-1"
+      ],
+      "createdAt": "2026-10-19T04:58:01.478Z",
+      "updatedAt": "2026-10-19T04:58:01.478Z"
+    }
+  ]
+}
