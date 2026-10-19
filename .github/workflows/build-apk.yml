@@ -1,0 +1,69 @@
+name: Compilar APK Android
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compilar APK de ChordMaster
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Configurar Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar Dependencias
+        run: npm ci
+
+      - name: Sincronizar Recursos Web con Capacitor
+        run: |
+          npx cap sync android
+
+      - name: Dar permisos de ejecución a Gradlew
+        run: chmod +x android/gradlew
+
+      - name: Compilar APK Android (Debug)
+        run: |
+          cd android
+          ./gradlew assembleDebug
+
+      - name: Subir APK como Artefacto Descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChordMaster-Live-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Crear Release con APK para Descarga Directa
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "ChordMaster Live v1.0.${{ github.run_number }} (APK)"
+          body: |
+            ## 📱 Descarga de la Aplicación Android (APK)
+            Descarga e instala el archivo **app-debug.apk** en tu teléfono Android.
+            
+            - Idioma: Español
+            - Conexión con tu servidor Render.com
+            - Acordes, Letras, Repertorios y Modo Escenario en vivo
+          files: |
+            android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

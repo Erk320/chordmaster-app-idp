@@ -1,8 +1,8 @@
 /**
- * ChordMaster Live - Core Application Controller
+ * ChordMaster Live - Controlador Principal de la Aplicación en Español
  */
 
-// Global Application State
+// Estado Global de la Aplicación
 const state = {
   currentView: 'songs', // 'songs', 'song-detail', 'setlists', 'setlist-detail'
   songs: [],
@@ -34,25 +34,25 @@ const state = {
   }
 };
 
-// ==================== INITIALIZATION ====================
+// ==================== INICIALIZACIÓN ====================
 document.addEventListener('DOMContentLoaded', async () => {
-  // Check Admin state
+  // Verificar estado de Administrador
   state.isAdmin = window.apiService.isAdminActive();
   updateAdminUI();
 
-  // Load Initial Data
+  // Cargar Canciones y Repertorios Iniciales
   await loadSongs();
   await loadSetlists();
 
-  // Setup Event Listeners
+  // Configurar Eventos y Oyentes
   setupNavigation();
   setupSearchAndFilters();
   setupScrollController();
   setupSwipeGestures();
 
-  // Listen for real-time remote updates
+  // Escuchar actualizaciones remotas en tiempo real
   window.apiService.onSync(async (syncInfo) => {
-    showToast('🔄 Songs updated by Admin! Refreshing library...', 'info');
+    showToast('🔄 ¡Canciones actualizadas por el Administrador!', 'info');
     await loadSongs(true);
     await loadSetlists(true);
     if (state.currentSong) {
@@ -64,12 +64,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // Check URL hash for direct links (e.g. #song-1)
+  // Manejar rutas con hash (ej. #song/song-1)
   handleRouteHash();
   window.addEventListener('hashchange', handleRouteHash);
 });
 
-// ==================== DATA LOADING ====================
+// ==================== CARGA DE DATOS ====================
 async function loadSongs(silent = false) {
   try {
     state.songs = await window.apiService.getSongs();
@@ -77,7 +77,7 @@ async function loadSongs(silent = false) {
     renderSongGrid();
     renderFilterChips();
   } catch (err) {
-    if (!silent) showToast('Failed to load songs from network', 'error');
+    if (!silent) showToast('No se pudieron cargar las canciones de la red', 'error');
   }
 }
 
@@ -86,11 +86,11 @@ async function loadSetlists(silent = false) {
     state.setlists = await window.apiService.getSetlists();
     renderSetlistsList();
   } catch (err) {
-    if (!silent) showToast('Failed to load setlists', 'error');
+    if (!silent) showToast('No se pudieron cargar los repertorios', 'error');
   }
 }
 
-// ==================== ROUTING & VIEWS ====================
+// ==================== ENRUTAMIENTO Y VISTAS ====================
 function switchView(viewName) {
   state.currentView = viewName;
   stopAutoScroll();
@@ -100,7 +100,7 @@ function switchView(viewName) {
   const target = document.getElementById(`view-${viewName}`);
   if (target) target.classList.remove('hidden');
 
-  // Update Bottom Nav active state
+  // Actualizar barra de navegación móvil inferior
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewName);
   });
@@ -130,7 +130,7 @@ function handleRouteHash() {
   }
 }
 
-// ==================== SEARCH & FILTERS ====================
+// ==================== BÚSQUEDA Y FILTROS ====================
 function setupSearchAndFilters() {
   const searchInput = document.getElementById('search-input');
   const clearBtn = document.getElementById('search-clear-btn');
@@ -166,16 +166,15 @@ function renderFilterChips() {
   const container = document.getElementById('filter-chips-container');
   if (!container) return;
 
-  // Extract unique keys
   const keys = Array.from(new Set(state.songs.map(s => s.key).filter(Boolean))).sort();
 
   let html = `
-    <button class="chip-btn ${state.selectedKeyFilter === 'ALL' ? 'active' : ''}" onclick="setKeyFilter('ALL')">All Keys</button>
+    <button class="chip-btn ${state.selectedKeyFilter === 'ALL' ? 'active' : ''}" onclick="setKeyFilter('ALL')">Todos los Tonos</button>
   `;
 
   keys.forEach(k => {
     html += `
-      <button class="chip-btn ${state.selectedKeyFilter === k ? 'active' : ''}" onclick="setKeyFilter('${k}')">Key of ${k}</button>
+      <button class="chip-btn ${state.selectedKeyFilter === k ? 'active' : ''}" onclick="setKeyFilter('${k}')">Tono: ${k}</button>
     `;
   });
 
@@ -191,7 +190,7 @@ window.setKeyFilter = function(key) {
 function applyFilters() {
   let list = [...state.songs];
 
-  // 1. Text Search across Title, Artist, Key, and Lyrics
+  // 1. Búsqueda por texto (Título, Artista, Tono, Letra)
   if (state.searchQuery) {
     const q = state.searchQuery;
     list = list.filter(song => {
@@ -203,12 +202,12 @@ function applyFilters() {
     });
   }
 
-  // 2. Key Filter
+  // 2. Filtro de Tono
   if (state.selectedKeyFilter !== 'ALL') {
     list = list.filter(song => song.key === state.selectedKeyFilter);
   }
 
-  // 3. Sort Order
+  // 3. Criterio de Ordenación
   if (state.sortBy === 'title') {
     list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
   } else if (state.sortBy === 'artist') {
@@ -229,15 +228,15 @@ function renderSongGrid() {
   if (!grid) return;
 
   if (countEl) {
-    countEl.textContent = `${state.filteredSongs.length} song${state.filteredSongs.length === 1 ? '' : 's'}`;
+    countEl.textContent = `${state.filteredSongs.length} canción${state.filteredSongs.length === 1 ? '' : 'es'}`;
   }
 
   if (state.filteredSongs.length === 0) {
     grid.innerHTML = `
       <div class="col-span-full text-center py-12 text-slate-400">
-        <p class="text-lg font-semibold">No songs match your search</p>
-        <p class="text-sm mt-1">Try another keyword, clear filters, or add a new song.</p>
-        ${state.isAdmin ? `<button onclick="openSongEditorModal()" class="btn btn-primary mt-4">+ Add New Song</button>` : ''}
+        <p class="text-lg font-semibold">No se encontraron canciones</p>
+        <p class="text-sm mt-1">Prueba con otra palabra clave o agrega una nueva canción.</p>
+        ${state.isAdmin ? `<button onclick="openSongEditorModal()" class="btn btn-primary mt-4">+ Agregar Nueva Canción</button>` : ''}
       </div>
     `;
     return;
@@ -250,7 +249,7 @@ function renderSongGrid() {
           <h3 class="song-card-title">${escapeHtml(song.title)}</h3>
           <span class="key-pill">${escapeHtml(song.key || 'C')}</span>
         </div>
-        <p class="song-card-artist">${escapeHtml(song.artist || 'Unknown Artist')}</p>
+        <p class="song-card-artist">${escapeHtml(song.artist || 'Artista Desconocido')}</p>
       </div>
 
       <div class="song-card-meta">
@@ -266,11 +265,11 @@ function renderSongGrid() {
   `).join('');
 }
 
-// ==================== SONG DETAIL & CHORDS VIEWER ====================
+// ==================== VISOR DE CANCIÓN Y ACORDES ====================
 async function openSongById(id) {
   const song = state.songs.find(s => s.id === id) || await window.apiService.getSong(id);
   if (!song) {
-    showToast('Song not found', 'error');
+    showToast('Canción no encontrada', 'error');
     switchView('songs');
     return;
   }
@@ -291,37 +290,42 @@ function renderSongDetail() {
   const artistEl = document.getElementById('viewer-artist');
   const keyDisplayEl = document.getElementById('viewer-current-key');
   const capoInfoEl = document.getElementById('viewer-capo-info');
+  const capoLabelEl = document.getElementById('capo-number-label');
   const contentEl = document.getElementById('viewer-sheet-content');
   const bpmEl = document.getElementById('viewer-bpm-display');
 
   if (titleEl) titleEl.textContent = song.title;
-  if (artistEl) artistEl.textContent = song.artist || 'Unknown Artist';
+  if (artistEl) artistEl.textContent = song.artist || 'Artista Desconocido';
   if (bpmEl) bpmEl.textContent = `${song.tempo || 120} BPM (${song.timeSignature || '4/4'})`;
 
-  // Compute transposed key
+  // Calcular tono transportado
   const originalKey = song.key || 'C';
   const transposedKey = window.ChordEngine.transposeNote(originalKey, state.currentKeySemitones);
   if (keyDisplayEl) {
-    keyDisplayEl.textContent = `Key: ${transposedKey} ${state.currentKeySemitones !== 0 ? `(${state.currentKeySemitones > 0 ? '+' : ''}${state.currentKeySemitones})` : ''}`;
+    keyDisplayEl.textContent = `Tono: ${transposedKey} ${state.currentKeySemitones !== 0 ? `(${state.currentKeySemitones > 0 ? '+' : ''}${state.currentKeySemitones})` : ''}`;
   }
 
-  // Capo Calculation
+  // Guía de Cejilla / Capo
+  if (capoLabelEl) {
+    capoLabelEl.textContent = state.capoFret === 0 ? 'Ninguno' : `Traste ${state.capoFret}`;
+  }
+
   if (capoInfoEl) {
     if (state.capoFret > 0) {
       const chordsShapeKey = window.ChordEngine.transposeNote(originalKey, -state.capoFret);
-      capoInfoEl.textContent = `Capo ${state.capoFret} (Play chords in ${chordsShapeKey} shape to sound in ${transposedKey})`;
+      capoInfoEl.textContent = `🎸 Capo en Traste ${state.capoFret} (Tocar figuras de ${chordsShapeKey} para sonar en ${transposedKey})`;
       capoInfoEl.classList.remove('hidden');
     } else {
       capoInfoEl.classList.add('hidden');
     }
   }
 
-  // Render chords and lyrics
+  // Renderizar acordes y letra
   if (contentEl) {
     contentEl.style.setProperty('--font-size-chords', `${state.fontSize}px`);
     contentEl.innerHTML = window.ChordEngine.renderSongHTML(song.content, state.currentKeySemitones, transposedKey);
 
-    // Bind chord click events to open guitar diagram popup
+    // Abrir diagrama al tocar un acorde
     contentEl.querySelectorAll('.chord-token').forEach(token => {
       token.addEventListener('click', (e) => {
         const chordName = e.target.getAttribute('data-chord');
@@ -330,16 +334,16 @@ function renderSongDetail() {
     });
   }
 
-  // Render Notes
+  // Renderizar Notas
   renderNotesSection();
 
-  // Admin edit/delete buttons
+  // Acciones de Administrador
   const adminBar = document.getElementById('viewer-admin-actions');
   if (adminBar) {
     adminBar.classList.toggle('hidden', !state.isAdmin);
   }
 
-  // Live Mode Setlist Controls
+  // Controles de Modo Escenario
   const liveBar = document.getElementById('setlist-live-stepper-bar');
   if (liveBar) {
     liveBar.classList.toggle('hidden', !state.isLiveMode);
@@ -349,7 +353,7 @@ function renderSongDetail() {
   }
 }
 
-// Transpose Key Controls (+/-)
+// Controles de Transporte de Tono (+/-)
 window.transpose = function(delta) {
   state.currentKeySemitones = (state.currentKeySemitones + delta);
   if (state.currentKeySemitones > 11) state.currentKeySemitones -= 12;
@@ -363,13 +367,13 @@ window.resetTranspose = function() {
   renderSongDetail();
 };
 
-// Capo Cycle (0 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 0)
+// Ciclar Cejilla / Capo (0 a 7 trastes)
 window.cycleCapo = function() {
   state.capoFret = (state.capoFret + 1) % 8;
   renderSongDetail();
 };
 
-// Font Size Controls (A- / A+)
+// Ajustar Tamaño de Letra (A- / A+)
 window.adjustFontSize = function(delta) {
   state.fontSize = Math.max(12, Math.min(32, state.fontSize + delta));
   const contentEl = document.getElementById('viewer-sheet-content');
@@ -378,7 +382,7 @@ window.adjustFontSize = function(delta) {
   }
 };
 
-// ==================== AUTO-SCROLL CONTROLLER ====================
+// ==================== CONTROLADOR DE AUTO-SCROLL ====================
 function setupScrollController() {
   const playBtn = document.getElementById('scroll-play-btn');
   const slider = document.getElementById('scroll-speed-slider');
@@ -393,7 +397,7 @@ function setupScrollController() {
       state.autoScroll.speed = parseFloat(e.target.value);
       if (speedLabel) speedLabel.textContent = `${state.autoScroll.speed}x`;
       if (state.autoScroll.isPlaying) {
-        startAutoScroll(); // restart with new speed
+        startAutoScroll();
       }
     });
   }
@@ -418,12 +422,10 @@ function startAutoScroll() {
   }
 
   const stepMs = 40;
-  // Calculate pixel per step
   state.autoScroll.interval = setInterval(() => {
     const scrollAmount = state.autoScroll.speed * 1.5;
     window.scrollBy({ top: scrollAmount, behavior: 'instant' });
 
-    // Check if reached bottom
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 5) {
       stopAutoScroll();
     }
@@ -443,7 +445,7 @@ function stopAutoScroll() {
   }
 }
 
-// ==================== INDEPENDENT MUSICIAN NOTES ====================
+// ==================== NOTAS INDEPENDIENTES DEL MÚSICO ====================
 function renderNotesSection() {
   if (!state.currentSong) return;
 
@@ -458,31 +460,30 @@ function renderNotesSection() {
     personalTabBtn?.classList.add('active');
     bandTabBtn?.classList.remove('active');
     textarea.value = window.apiService.getPersonalNotes(state.currentSong.id);
-    textarea.placeholder = "Write your personal notes for this song (e.g. Capo 3, Solo on fret 12, drums enter on verse 2). Saved automatically to this device.";
+    textarea.placeholder = "Escribe tus apuntes personales (ej. Capo 3, Solo de guitarra tras coro 2, entrar en compás 4). Se guardan automáticamente en este celular.";
     textarea.readOnly = false;
   } else {
     personalTabBtn?.classList.remove('active');
     bandTabBtn?.classList.add('active');
     textarea.value = state.currentSong.notes || '';
-    textarea.placeholder = state.isAdmin ? "Band notes synced to everyone in the cloud." : "Shared band notes set by Admin.";
+    textarea.placeholder = state.isAdmin ? "Notas generales para toda la banda sincronizadas en la nube." : "Notas generales de la banda establecidas por el Administrador.";
     textarea.readOnly = !state.isAdmin;
   }
 
-  if (statusEl) statusEl.textContent = 'Auto-saved locally';
+  if (statusEl) statusEl.textContent = 'Guardado localmente';
 
-  // Debounced auto-save listener
   textarea.oninput = debounce(() => {
     if (state.activeNotesTab === 'personal') {
       window.apiService.savePersonalNotes(state.currentSong.id, textarea.value);
       if (statusEl) {
-        statusEl.textContent = '✓ Saved to your phone';
+        statusEl.textContent = '✓ Guardado en tu celular';
         statusEl.className = 'text-emerald-400 font-semibold';
       }
     } else if (state.isAdmin) {
       state.currentSong.notes = textarea.value;
       window.apiService.updateSong(state.currentSong.id, { notes: textarea.value });
       if (statusEl) {
-        statusEl.textContent = '✓ Synced to cloud band notes';
+        statusEl.textContent = '✓ Sincronizado en la nube para la banda';
         statusEl.className = 'text-emerald-400 font-semibold';
       }
     }
@@ -494,7 +495,7 @@ window.switchNotesTab = function(tab) {
   renderNotesSection();
 };
 
-// ==================== METRONOME & TAP TEMPO ====================
+// ==================== METRÓNOMO Y AUDIO ====================
 window.toggleMetronome = function() {
   if (state.metronome.isPlaying) {
     stopMetronome();
@@ -519,7 +520,7 @@ function startMetronome() {
   const intervalMs = (60 / bpm) * 1000;
   let beat = 0;
 
-  playClickSound(true); // first beat accent
+  playClickSound(true);
 
   state.metronome.interval = setInterval(() => {
     beat = (beat + 1) % 4;
@@ -560,7 +561,7 @@ function playClickSound(isHigh) {
   } catch (err) {}
 }
 
-// ==================== SETLISTS & LIVE STAGE MODE ====================
+// ==================== REPERTORIOS Y MODO ESCENARIO ====================
 function renderSetlistsList() {
   const container = document.getElementById('setlists-list');
   if (!container) return;
@@ -568,8 +569,8 @@ function renderSetlistsList() {
   if (state.setlists.length === 0) {
     container.innerHTML = `
       <div class="text-center py-12 text-slate-400">
-        <p class="text-lg font-semibold">No setlists created yet</p>
-        <button onclick="openSetlistEditorModal()" class="btn btn-primary mt-4">+ Create First Setlist</button>
+        <p class="text-lg font-semibold">No hay repertorios creados aún</p>
+        <button onclick="openSetlistEditorModal()" class="btn btn-primary mt-4">+ Crear Primer Repertorio</button>
       </div>
     `;
     return;
@@ -580,15 +581,15 @@ function renderSetlistsList() {
       <div class="flex items-start justify-between">
         <div>
           <h3 class="text-lg font-bold text-slate-100">${escapeHtml(sl.name)}</h3>
-          <p class="text-sm text-slate-400 mt-1">${escapeHtml(sl.description || 'Live Performance Setlist')}</p>
+          <p class="text-sm text-slate-400 mt-1">${escapeHtml(sl.description || 'Repertorio en Vivo')}</p>
         </div>
         <span class="bg-blue-900/40 text-blue-300 text-xs font-bold px-2.5 py-1 rounded-full border border-blue-500/30">
-          ${(sl.songIds || []).length} songs
+          ${(sl.songIds || []).length} canciones
         </span>
       </div>
       <div class="mt-4 flex gap-2">
         <button onclick="event.stopPropagation(); startLiveSetlist('${sl.id}')" class="btn btn-gold text-sm py-1.5 px-3">
-          ⚡ Start Live Stage Mode
+          ⚡ Iniciar Modo Escenario
         </button>
       </div>
     </div>
@@ -598,7 +599,7 @@ function renderSetlistsList() {
 async function openSetlistById(id) {
   const setlist = await window.apiService.getSetlist(id);
   if (!setlist) {
-    showToast('Setlist not found', 'error');
+    showToast('Repertorio no encontrado', 'error');
     return;
   }
 
@@ -620,7 +621,7 @@ function renderSetlistDetail() {
 
   const songs = sl.songs || [];
   if (songs.length === 0) {
-    songsListEl.innerHTML = `<p class="text-slate-400 italic py-4">No songs in this setlist. Add songs below!</p>`;
+    songsListEl.innerHTML = `<p class="text-slate-400 italic py-4">No hay canciones en este repertorio.</p>`;
     return;
   }
 
@@ -630,13 +631,13 @@ function renderSetlistDetail() {
         <span class="text-amber-400 font-extrabold text-sm w-6">${idx + 1}.</span>
         <div>
           <h4 class="font-bold text-slate-100 text-sm">${escapeHtml(song.title)}</h4>
-          <p class="text-xs text-slate-400">${escapeHtml(song.artist || '')} · Key: ${song.key || 'C'}</p>
+          <p class="text-xs text-slate-400">${escapeHtml(song.artist || '')} · Tono: ${song.key || 'C'}</p>
         </div>
       </div>
       <div class="flex items-center gap-1">
-        <button onclick="moveSetlistSong(${idx}, -1)" class="p-1 text-slate-400 hover:text-white" title="Move Up">▲</button>
-        <button onclick="moveSetlistSong(${idx}, 1)" class="p-1 text-slate-400 hover:text-white" title="Move Down">▼</button>
-        <button onclick="removeSongFromSetlist(${idx})" class="p-1 text-rose-400 hover:text-rose-300 ml-2" title="Remove">✕</button>
+        <button onclick="moveSetlistSong(${idx}, -1)" class="p-1 text-slate-400 hover:text-white" title="Subir">▲</button>
+        <button onclick="moveSetlistSong(${idx}, 1)" class="p-1 text-slate-400 hover:text-white" title="Bajar">▼</button>
+        <button onclick="removeSongFromSetlist(${idx})" class="p-1 text-rose-400 hover:text-rose-300 ml-2" title="Quitar">✕</button>
       </div>
     </div>
   `).join('');
@@ -645,7 +646,7 @@ function renderSetlistDetail() {
 window.startLiveSetlist = async function(setlistId) {
   const setlist = await window.apiService.getSetlist(setlistId);
   if (!setlist || !setlist.songs || setlist.songs.length === 0) {
-    showToast('Add at least one song to start live mode', 'error');
+    showToast('Agrega al menos una canción al repertorio', 'error');
     return;
   }
 
@@ -675,19 +676,19 @@ function renderLiveStepper() {
   const counterEl = document.getElementById('live-song-counter');
 
   if (counterEl) {
-    counterEl.textContent = `Song ${idx + 1} of ${total}`;
+    counterEl.textContent = `Canción ${idx + 1} de ${total}`;
   }
 
   if (prevBtn) {
     prevBtn.disabled = idx === 0;
     const prevSong = sl.songs[idx - 1];
-    prevBtn.innerHTML = `◀ ${prevSong ? escapeHtml(prevSong.title.slice(0, 10)) : 'Prev'}`;
+    prevBtn.innerHTML = `◀ ${prevSong ? escapeHtml(prevSong.title.slice(0, 10)) : 'Anterior'}`;
   }
 
   if (nextBtn) {
     nextBtn.disabled = idx === total - 1;
     const nextSong = sl.songs[idx + 1];
-    nextBtn.innerHTML = `${nextSong ? escapeHtml(nextSong.title.slice(0, 10)) : 'Next'} ▶`;
+    nextBtn.innerHTML = `${nextSong ? escapeHtml(nextSong.title.slice(0, 10)) : 'Siguiente'} ▶`;
   }
 }
 
@@ -707,10 +708,9 @@ window.exitLiveMode = function() {
   state.isLiveMode = false;
   const liveBar = document.getElementById('setlist-live-stepper-bar');
   if (liveBar) liveBar.classList.add('hidden');
-  showToast('Exited Live Stage Mode', 'info');
+  showToast('Saliste del Modo Escenario', 'info');
 };
 
-// Move song up/down in setlist
 window.moveSetlistSong = async function(index, delta) {
   const sl = state.currentSetlist;
   const target = index + delta;
@@ -731,7 +731,7 @@ window.removeSongFromSetlist = async function(index) {
   await openSetlistById(sl.id);
 };
 
-// ==================== SWIPE GESTURES ON TOUCH SCREENS ====================
+// ==================== GESTOS TÁCTILES EN PANTALLAS ====================
 function setupSwipeGestures() {
   let touchStartX = 0;
   let touchEndX = 0;
@@ -749,17 +749,15 @@ function setupSwipeGestures() {
     const diff = touchEndX - touchStartX;
     if (state.isLiveMode && Math.abs(diff) > 75) {
       if (diff < 0) {
-        // Swiped Left -> Next Song
         liveNextSong();
       } else {
-        // Swiped Right -> Prev Song
         livePrevSong();
       }
     }
   }
 }
 
-// ==================== ADMIN MANAGEMENT ====================
+// ==================== ADMINISTRADOR ====================
 function updateAdminUI() {
   const badge = document.getElementById('admin-badge-indicator');
   const addFab = document.getElementById('admin-fab-add');
@@ -767,7 +765,7 @@ function updateAdminUI() {
 
   if (badge) {
     badge.className = `admin-badge ${state.isAdmin ? 'active' : 'inactive'}`;
-    badge.textContent = state.isAdmin ? 'Admin Active' : 'Viewer Mode';
+    badge.textContent = state.isAdmin ? 'Admin Activo' : 'Modo Lector';
   }
 
   if (addFab) {
@@ -775,7 +773,7 @@ function updateAdminUI() {
   }
 
   if (adminMenuBtn) {
-    adminMenuBtn.textContent = state.isAdmin ? 'Admin: ON' : 'Login Admin';
+    adminMenuBtn.textContent = state.isAdmin ? 'Admin: ON' : 'Acceso Admin';
   }
 }
 
@@ -794,11 +792,11 @@ window.submitAdminLogin = async function(e) {
     state.isAdmin = true;
     updateAdminUI();
     document.getElementById('admin-login-dialog').close();
-    showToast('Admin Mode Unlocked!', 'success');
+    showToast('¡Modo Administrador Desbloqueado!', 'success');
     renderSongGrid();
     if (state.currentSong) renderSongDetail();
   } else {
-    showToast(res.error || 'Incorrect PIN', 'error');
+    showToast(res.error || 'PIN Incorrecto', 'error');
   }
 };
 
@@ -807,12 +805,12 @@ window.logoutAdmin = function() {
   window.apiService.setAdminState(false);
   updateAdminUI();
   document.getElementById('admin-login-dialog').close();
-  showToast('Logged out of Admin Mode', 'info');
+  showToast('Sesión de administrador cerrada', 'info');
   renderSongGrid();
   if (state.currentSong) renderSongDetail();
 };
 
-// ==================== SONG EDITOR (MODAL) ====================
+// ==================== EDITOR DE CANCIÓN (MODAL) ====================
 window.openSongEditorModal = function(songId = null) {
   const dialog = document.getElementById('song-editor-dialog');
   const form = document.getElementById('song-editor-form');
@@ -839,17 +837,16 @@ window.openSongEditorModal = function(songId = null) {
     timeSigInput.value = song.timeSignature || '4/4';
     tagsInput.value = (song.tags || []).join(', ');
     contentInput.value = song.content || '';
-    document.getElementById('editor-modal-title').textContent = 'Edit Song';
+    document.getElementById('editor-modal-title').textContent = 'Editar Canción';
   } else {
     form.reset();
     idInput.value = '';
     keyInput.value = 'G';
     tempoInput.value = 120;
     timeSigInput.value = '4/4';
-    document.getElementById('editor-modal-title').textContent = 'Add New Song';
+    document.getElementById('editor-modal-title').textContent = 'Agregar Nueva Canción';
   }
 
-  // Update live preview as user types
   const updatePreview = () => {
     previewDiv.innerHTML = window.ChordEngine.renderSongHTML(contentInput.value, 0, keyInput.value);
   };
@@ -889,10 +886,10 @@ window.saveSongFromEditor = async function(e) {
   try {
     if (id) {
       await window.apiService.updateSong(id, songData);
-      showToast('✓ Song updated and published to all users!', 'success');
+      showToast('✓ ¡Canción actualizada y publicada a todos!', 'success');
     } else {
       await window.apiService.createSong(songData);
-      showToast('✓ New song added and published!', 'success');
+      showToast('✓ ¡Canción agregada y publicada a todos!', 'success');
     }
     document.getElementById('song-editor-dialog').close();
     await loadSongs();
@@ -903,11 +900,11 @@ window.saveSongFromEditor = async function(e) {
 
 window.deleteCurrentSong = async function() {
   if (!state.currentSong) return;
-  if (!confirm(`Are you sure you want to delete "${state.currentSong.title}" from the cloud database?`)) return;
+  if (!confirm(`¿Estás seguro de que deseas eliminar "${state.currentSong.title}" de la base de datos en la nube?`)) return;
 
   try {
     await window.apiService.deleteSong(state.currentSong.id);
-    showToast('Song deleted from database', 'info');
+    showToast('Canción eliminada del catálogo', 'info');
     await loadSongs();
     switchView('songs');
   } catch (err) {
@@ -915,7 +912,7 @@ window.deleteCurrentSong = async function() {
   }
 };
 
-// ==================== CHORD DIAGRAM MODAL ====================
+// ==================== MODAL DIAGRAMA DE ACORDE ====================
 window.openChordDiagramModal = function(chordName) {
   const dialog = document.getElementById('chord-diagram-dialog');
   const container = document.getElementById('chord-diagram-display');
@@ -925,7 +922,7 @@ window.openChordDiagramModal = function(chordName) {
   dialog.showModal();
 };
 
-// ==================== QR CODE & NETWORK SHARE MODAL ====================
+// ==================== MODAL CÓDIGO QR / COMPARTIR ====================
 window.openQrShareModal = async function() {
   const dialog = document.getElementById('qr-share-dialog');
   const imgEl = document.getElementById('qr-code-image');
@@ -944,7 +941,66 @@ window.openQrShareModal = async function() {
   }
 };
 
-// ==================== SETLIST EDITOR MODAL ====================
+// ==================== MODAL CONFIGURACIÓN NUBE RENDER.COM ====================
+window.openCloudConfigModal = function() {
+  const dialog = document.getElementById('render-cloud-dialog');
+  const input = document.getElementById('cloud-url-input');
+  const feedback = document.getElementById('cloud-test-feedback');
+  if (!dialog) return;
+
+  if (input) {
+    input.value = window.apiService.getCloudUrl();
+  }
+  if (feedback) {
+    feedback.className = 'hidden';
+  }
+
+  dialog.showModal();
+};
+
+window.testAndSaveCloudUrl = async function() {
+  const input = document.getElementById('cloud-url-input');
+  const feedback = document.getElementById('cloud-test-feedback');
+  const url = input.value.trim();
+
+  if (feedback) {
+    feedback.className = 'text-xs font-semibold p-2.5 rounded-lg mb-3 bg-blue-900/40 text-blue-300 block';
+    feedback.textContent = 'Probando conexión con el servidor en la nube...';
+  }
+
+  const result = await window.apiService.testConnection(url);
+  if (result.success) {
+    window.apiService.setCloudUrl(url);
+    if (feedback) {
+      feedback.className = 'text-xs font-semibold p-2.5 rounded-lg mb-3 bg-emerald-900/40 text-emerald-300 block';
+      feedback.textContent = `✓ ¡Conectado exitosamente! Versión: ${result.data?.version || 1}, Canciones: ${result.data?.songCount || 0}`;
+    }
+    showToast('¡Servidor en la nube guardado con éxito!', 'success');
+    await loadSongs();
+    await loadSetlists();
+  } else {
+    if (feedback) {
+      feedback.className = 'text-xs font-semibold p-2.5 rounded-lg mb-3 bg-rose-900/40 text-rose-300 block';
+      feedback.textContent = `✕ Error al conectar: ${result.error}. Verifica que el servicio esté activo en Render.`;
+    }
+  }
+};
+
+window.resetToLocalServer = function() {
+  window.apiService.setCloudUrl('');
+  const input = document.getElementById('cloud-url-input');
+  const feedback = document.getElementById('cloud-test-feedback');
+  if (input) input.value = '';
+  if (feedback) {
+    feedback.className = 'text-xs font-semibold p-2.5 rounded-lg mb-3 bg-slate-800 text-slate-300 block';
+    feedback.textContent = 'Restablecido al servidor local por defecto.';
+  }
+  showToast('Restablecido a servidor local', 'info');
+  loadSongs();
+  loadSetlists();
+};
+
+// ==================== MODAL EDITOR DE REPERTORIOS ====================
 window.openSetlistEditorModal = function() {
   const dialog = document.getElementById('setlist-editor-dialog');
   if (!dialog) return;
@@ -975,7 +1031,7 @@ window.saveSetlistFromEditor = async function(e) {
       description,
       songIds: checked
     });
-    showToast('✓ Setlist created!', 'success');
+    showToast('✓ ¡Repertorio creado exitosamente!', 'success');
     document.getElementById('setlist-editor-dialog').close();
     await loadSetlists();
   } catch (err) {
@@ -983,7 +1039,7 @@ window.saveSetlistFromEditor = async function(e) {
   }
 };
 
-// ==================== UTILITIES ====================
+// ==================== UTILIDADES ====================
 function setupNavigation() {
   document.querySelectorAll('.nav-item').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1036,10 +1092,9 @@ function escapeHtml(str) {
     .replace(/'/g, '&#039;');
 }
 
-// Global Window Exports for DOM Handlers
+// Exportar funciones globales a window para el DOM
 window.switchView = switchView;
 window.openSongById = openSongById;
 window.openSetlistById = openSetlistById;
 window.openSongFromSetlist = openSongFromSetlist;
 window.state = state;
-

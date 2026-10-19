@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>ChordMaster Live - Chords, Lyrics & Setlists</title>
+  <title>ChordMaster Live - Acordes, Letras y Repertorios</title>
   
-  <!-- PWA & Mobile Optimization -->
+  <!-- PWA y Optimización Móvil -->
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0b0f19">
   <meta name="mobile-web-app-capable" content="yes">
@@ -13,11 +13,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ChordMaster">
   
-  <!-- Favicon / Icons -->
+  <!-- Iconos -->
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
   <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
-  <!-- Tailwind CSS CDN for rapid styling utilities -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -36,35 +36,35 @@
     }
   </script>
 
-  <!-- Custom Stylesheet -->
+  <!-- Hoja de Estilos -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen">
 
-  <!-- Toast Notification Container -->
+  <!-- Notificaciones Toast -->
   <div id="connection-status-toast" class="status-toast" role="status" aria-live="polite"></div>
 
-  <!-- Android PWA Install Prompt Banner -->
+  <!-- Banner de Instalación PWA en Android -->
   <div id="pwa-install-banner" class="hidden bg-gradient-to-r from-blue-700 to-indigo-700 text-white px-4 py-3 items-center justify-between shadow-lg sticky top-0 z-50">
     <div class="flex items-center gap-3">
-      <img src="/icons/icon-192.png" alt="App Icon" class="w-8 h-8 rounded-lg shadow">
+      <img src="/icons/icon-192.png" alt="Icono de la App" class="w-8 h-8 rounded-lg shadow">
       <div>
-        <p class="text-xs font-bold uppercase tracking-wider text-blue-200">Android Mobile App</p>
-        <p class="text-sm font-semibold">Install ChordMaster on your Home Screen</p>
+        <p class="text-xs font-bold uppercase tracking-wider text-blue-200">App Móvil Android</p>
+        <p class="text-sm font-semibold">Instala ChordMaster en tu pantalla de inicio</p>
       </div>
     </div>
     <div class="flex items-center gap-2">
       <button onclick="triggerPwaInstall()" class="bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs shadow">
-        Install App
+        Instalar App
       </button>
-      <button onclick="document.getElementById('pwa-install-banner').classList.add('hidden')" class="text-blue-200 hover:text-white p-1">
+      <button onclick="document.getElementById('pwa-install-banner').classList.add('hidden')" class="text-blue-200 hover:text-white p-1" aria-label="Cerrar banner">
         ✕
       </button>
     </div>
   </div>
 
   <div id="app-container">
-    <!-- Top Header -->
+    <!-- Encabezado Superior -->
     <header class="app-header">
       <div class="brand-title" onclick="switchView('songs'); window.location.hash='';">
         <img src="/icons/icon.svg" alt="Logo" class="brand-icon">
@@ -72,237 +72,247 @@
       </div>
 
       <div class="flex items-center gap-2">
-        <!-- QR Code Share Button -->
-        <button onclick="openQrShareModal()" class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-1.5" title="Scan to open on phone">
-          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-          <span class="hidden sm:inline">Connect Phone</span>
+        <!-- Botón Configurar Nube Render -->
+        <button onclick="openCloudConfigModal()" class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-1.5" title="Configurar Servidor Render.com">
+          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+          <span class="hidden md:inline">Nube Render</span>
         </button>
 
-        <!-- Admin Status Indicator -->
+        <!-- Botón Compartir QR -->
+        <button onclick="openQrShareModal()" class="p-2 rounded-lg bg-slate-800 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-1.5" title="Escanear con celular Android">
+          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
+          <span class="hidden sm:inline">Conectar Celular</span>
+        </button>
+
+        <!-- Indicador Estado Administrador -->
         <div id="admin-badge-indicator" class="admin-badge inactive cursor-pointer" onclick="openAdminLoginModal()">
-          Viewer Mode
+          Modo Lector
         </div>
 
-        <!-- Admin Login / Logout Trigger -->
+        <!-- Botón Toggle Admin -->
         <button id="admin-toggle-btn" onclick="openAdminLoginModal()" class="text-xs text-slate-400 hover:text-white underline">
           Admin
         </button>
       </div>
     </header>
 
-    <!-- ==================== VIEW 1: SONGS LIBRARY (GENERAL VIEW) ==================== -->
+    <!-- ==================== VISTA 1: BIBLIOTECA GENERAL DE CANCIONES ==================== -->
     <main id="view-songs" class="view-screen">
-      <!-- Search Bar -->
+      <!-- Buscador -->
       <section class="search-container">
         <div class="search-input-wrapper">
           <svg class="search-icon-left w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
-          <input type="text" id="search-input" class="search-input" placeholder="Search by song name, artist, key, or lyrics..." autocomplete="off">
-          <button id="search-clear-btn" class="search-clear-btn" style="display: none;" aria-label="Clear search">✕</button>
+          <input type="text" id="search-input" class="search-input" placeholder="Buscar por canción, artista, tono o letra..." autocomplete="off">
+          <button id="search-clear-btn" class="search-clear-btn" style="display: none;" aria-label="Limpiar búsqueda">✕</button>
         </div>
 
-        <!-- Filter Chips Row & Sort -->
+        <!-- Filtros Rápidos por Tonalidad y Orden -->
         <div class="flex items-center justify-between mt-3 gap-2">
           <div id="filter-chips-container" class="filter-chips-row flex-1">
-            <!-- Populated dynamically: All Keys, Key of G, Key of C... -->
+            <!-- Chips generados por app.js -->
           </div>
 
           <div class="flex items-center gap-1.5 shrink-0">
             <select id="sort-select" class="bg-slate-800 text-slate-300 text-xs rounded-lg px-2 py-1.5 border border-slate-700 outline-none">
-              <option value="title">Sort: Title (A-Z)</option>
-              <option value="artist">Sort: Artist</option>
-              <option value="key">Sort: Key</option>
-              <option value="recent">Sort: Recently Added</option>
+              <option value="title">Ordenar: Título (A-Z)</option>
+              <option value="artist">Ordenar: Artista</option>
+              <option value="key">Ordenar: Tono</option>
+              <option value="recent">Ordenar: Recientes</option>
             </select>
           </div>
         </div>
       </section>
 
-      <!-- Songs Count Badge -->
+      <!-- Contador de Canciones -->
       <div class="max-w-4xl mx-auto px-4 py-1 flex items-center justify-between text-xs text-slate-400">
-        <span id="songs-count-badge">Loading songs...</span>
-        <span class="text-slate-500">Tap any song to view chords & lyrics</span>
+        <span id="songs-count-badge">Cargando canciones...</span>
+        <span class="text-slate-500">Toca cualquier canción para ver acordes y letra</span>
       </div>
 
-      <!-- Songs Grid -->
+      <!-- Cuadrícula de Canciones -->
       <section id="songs-grid" class="songs-grid">
-        <!-- Rendered by app.js -->
+        <!-- Renderizado dinámicamente por app.js -->
       </section>
     </main>
 
-    <!-- ==================== VIEW 2: SONG DETAIL & CHORDS VIEWER ==================== -->
+    <!-- ==================== VISTA 2: VISOR DE CANCIÓN Y ACORDES ==================== -->
     <main id="view-song-detail" class="view-screen hidden">
-      <!-- Sticky Song Header -->
+      <!-- Encabezado Fijo de la Canción -->
       <div class="song-viewer-header">
         <div class="song-viewer-title-row">
           <div class="flex items-center gap-3">
-            <button onclick="switchView('songs'); window.location.hash='';" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300" aria-label="Back to Library">
+            <button onclick="switchView('songs'); window.location.hash='';" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300" aria-label="Volver a la biblioteca">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             </button>
             <div>
-              <h1 id="viewer-title" class="viewer-song-title">Song Title</h1>
-              <p id="viewer-artist" class="viewer-song-artist">Artist Name</p>
+              <h1 id="viewer-title" class="viewer-song-title">Título de la Canción</h1>
+              <p id="viewer-artist" class="viewer-song-artist">Artista / Autor</p>
             </div>
           </div>
 
-          <!-- Metronome & BPM Pill -->
-          <button id="metronome-btn" onclick="toggleMetronome()" class="btn btn-secondary text-xs px-3 py-1.5 shrink-0" title="Toggle Metronome Audio/Flash">
+          <!-- Botón de Metrónomo y BPM -->
+          <button id="metronome-btn" onclick="toggleMetronome()" class="btn btn-secondary text-xs px-3 py-1.5 shrink-0" title="Activar/Desactivar metrónomo">
             ⏱ <span id="viewer-bpm-display">120 BPM</span>
           </button>
         </div>
 
-        <!-- Transpose, Capo & Font Size Toolbar -->
+        <!-- Barra de Transporte, Cejilla (Capo) y Tamaño de Letra -->
         <div class="viewer-controls-bar">
-          <!-- Transpose Semitone Group -->
+          <!-- Control de Transporte -->
           <div class="control-pill-group">
-            <button onclick="transpose(-1)" class="control-btn" title="Transpose Down Semitone">-1</button>
-            <span id="viewer-current-key" class="control-label">Key: C</span>
-            <button onclick="transpose(1)" class="control-btn" title="Transpose Up Semitone">+1</button>
-            <button onclick="resetTranspose()" class="control-btn text-xs text-slate-400" title="Reset Transposition">Reset</button>
+            <button onclick="transpose(-1)" class="control-btn" title="Bajar medio tono">-1</button>
+            <span id="viewer-current-key" class="control-label">Tono: C</span>
+            <button onclick="transpose(1)" class="control-btn" title="Subir medio tono">+1</button>
+            <button onclick="resetTranspose()" class="control-btn text-xs text-slate-400" title="Restablecer tono original">Reset</button>
           </div>
 
-          <!-- Capo Helper Pill -->
-          <button onclick="cycleCapo()" class="btn btn-secondary text-xs px-2.5 py-1.5" title="Cycle Capo Position">
-            🎸 Capo: <span id="capo-number-label">Cycle</span>
+          <!-- Cejilla / Capo -->
+          <button onclick="cycleCapo()" class="btn btn-secondary text-xs px-2.5 py-1.5" title="Cambiar posición del Capo/Cejilla">
+            🎸 Capo: <span id="capo-number-label">Ninguno</span>
           </button>
 
-          <!-- Font Size Group -->
+          <!-- Tamaño de Letra -->
           <div class="control-pill-group ml-auto">
-            <button onclick="adjustFontSize(-2)" class="control-btn text-xs font-bold" title="Decrease Font">A-</button>
-            <button onclick="adjustFontSize(2)" class="control-btn text-sm font-bold" title="Increase Font">A+</button>
+            <button onclick="adjustFontSize(-2)" class="control-btn text-xs font-bold" title="Reducir tamaño de letra">A-</button>
+            <button onclick="adjustFontSize(2)" class="control-btn text-sm font-bold" title="Aumentar tamaño de letra">A+</button>
           </div>
         </div>
 
-        <!-- Capo Suggestion Banner -->
+        <!-- Guía de Cejilla / Capo -->
         <div id="viewer-capo-info" class="capo-tag mt-2 hidden"></div>
 
-        <!-- Admin Actions (Edit / Delete) -->
+        <!-- Acciones de Administrador (Editar / Eliminar) -->
         <div id="viewer-admin-actions" class="hidden flex gap-2 mt-2 pt-2 border-t border-slate-700/60">
           <button onclick="openSongEditorModal(state.currentSong?.id)" class="btn btn-secondary text-xs py-1 px-3">
-            ✏️ Edit Song
+            ✏️ Editar Canción
           </button>
           <button onclick="deleteCurrentSong()" class="btn btn-danger text-xs py-1 px-3">
-            🗑️ Delete Song
+            🗑️ Eliminar Canción
           </button>
         </div>
       </div>
 
-      <!-- Live Performance Stepper Bar (Only in Live Setlist Mode) -->
+      <!-- Barra de Escenario en Vivo (Solo en Modo Repertorio) -->
       <div id="setlist-live-stepper-bar" class="hidden setlist-live-bar">
         <button id="live-prev-btn" onclick="livePrevSong()" class="live-nav-btn">
-          ◀ Prev
+          ◀ Anterior
         </button>
         <div class="text-center">
-          <span id="live-song-counter" class="text-xs font-bold text-amber-400 tracking-wider uppercase block">Song 1 of 5</span>
-          <button onclick="exitLiveMode()" class="text-xs text-slate-400 underline hover:text-white">Exit Stage</button>
+          <span id="live-song-counter" class="text-xs font-bold text-amber-400 tracking-wider uppercase block">Canción 1 de 5</span>
+          <button onclick="exitLiveMode()" class="text-xs text-slate-400 underline hover:text-white">Salir del Escenario</button>
         </div>
         <button id="live-next-btn" onclick="liveNextSong()" class="live-nav-btn">
-          Next ▶
+          Siguiente ▶
         </button>
       </div>
 
-      <!-- Chords & Lyrics Rendered Sheet -->
+      <!-- Hoja de Acordes y Letras -->
       <section id="viewer-sheet-content" class="chords-sheet-content">
-        <!-- Rendered by ChordEngine -->
+        <!-- Generado por ChordEngine -->
       </section>
 
-      <!-- Independent Musician Notes Section -->
+      <!-- Sección de Notas Independientes del Músico -->
       <section class="notes-container">
         <div class="notes-header-tabs">
           <button id="notes-tab-personal" class="notes-tab-btn active" onclick="switchNotesTab('personal')">
-            📝 My Personal Notes (Local to this Device)
+            📝 Mis Notas Personales (Guardadas en este celular)
           </button>
           <button id="notes-tab-band" class="notes-tab-btn" onclick="switchNotesTab('band')">
-            👥 Band Notes (Cloud Synced)
+            👥 Notas de la Banda (Sincronizadas en la Nube)
           </button>
         </div>
-        <textarea id="song-notes-textarea" class="notes-editor-textarea" placeholder="Add independent notes for this song..."></textarea>
+        <textarea id="song-notes-textarea" class="notes-editor-textarea" placeholder="Escribe notas personales para esta canción..."></textarea>
         <div class="notes-footer-status">
-          <span id="notes-save-status">Saved</span>
-          <span class="text-slate-500 text-xs">Notes are preserved independently for every song</span>
+          <span id="notes-save-status">Guardado</span>
+          <span class="text-slate-500 text-xs">Las notas se guardan de forma independiente para cada canción</span>
         </div>
       </section>
     </main>
 
-    <!-- ==================== VIEW 3: SETLISTS ==================== -->
+    <!-- ==================== VISTA 3: REPERTORIOS (SETLISTS) ==================== -->
     <main id="view-setlists" class="view-screen hidden p-4 max-w-3xl mx-auto w-full">
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-xl font-extrabold text-slate-100">Setlists & Gigs</h2>
-          <p class="text-xs text-slate-400">Organize songs for rehearsals, worship services, or concerts</p>
+          <h2 class="text-xl font-extrabold text-slate-100">Repertorios y Conciertos</h2>
+          <p class="text-xs text-slate-400">Organiza canciones para ensayos, servicios dominicales o presentaciones</p>
         </div>
         <button onclick="openSetlistEditorModal()" class="btn btn-primary text-xs py-2 px-3">
-          + New Setlist
+          + Nuevo Repertorio
         </button>
       </div>
 
       <div id="setlists-list">
-        <!-- Rendered by app.js -->
+        <!-- Renderizado por app.js -->
       </div>
     </main>
 
-    <!-- ==================== VIEW 4: SETLIST DETAIL ==================== -->
+    <!-- ==================== VISTA 4: DETALLE DEL REPERTORIO ==================== -->
     <main id="view-setlist-detail" class="view-screen hidden p-4 max-w-3xl mx-auto w-full">
       <div class="flex items-center gap-3 mb-4">
         <button onclick="switchView('setlists'); window.location.hash='setlists';" class="p-2 rounded-lg bg-slate-800 text-slate-300">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
         <div>
-          <h2 id="setlist-title" class="text-xl font-extrabold text-slate-100">Setlist</h2>
+          <h2 id="setlist-title" class="text-xl font-extrabold text-slate-100">Repertorio</h2>
           <p id="setlist-desc" class="text-xs text-slate-400"></p>
         </div>
       </div>
 
-      <!-- Start Live Performance Banner -->
+      <!-- Banner de Inicio Modo Escenario -->
       <div class="bg-gradient-to-r from-amber-600/30 to-amber-500/20 border border-amber-500/40 rounded-xl p-4 mb-5 flex items-center justify-between">
         <div>
-          <h4 class="font-extrabold text-amber-300 text-sm">⚡ Live Stage Mode</h4>
-          <p class="text-xs text-slate-300 mt-0.5">Swipe or step through songs hands-free with auto-scroll and saved keys</p>
+          <h4 class="font-extrabold text-amber-300 text-sm">⚡ Modo Escenario en Vivo</h4>
+          <p class="text-xs text-slate-300 mt-0.5">Navega entre canciones deslizando con el dedo o con botones grandes sin tocar menús</p>
         </div>
         <button onclick="startLiveSetlist(state.currentSetlist?.id)" class="btn btn-gold text-xs font-bold py-2 px-4 shadow">
-          Start Live Mode
+          Iniciar Modo Escenario
         </button>
       </div>
 
-      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Song Order</h3>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Orden de Canciones</h3>
       <div id="setlist-songs-container">
-        <!-- Rendered by app.js -->
+        <!-- Renderizado por app.js -->
       </div>
     </main>
 
-    <!-- Floating Auto-Scroll Toolbar (Shown in Song Detail View) -->
+    <!-- Barra Flotante de Desplazamiento Automático (Auto-Scroll) -->
     <div id="floating-scroll-bar" class="floating-scroll-bar">
-      <button id="scroll-play-btn" class="scroll-play-btn" title="Toggle Auto-Scroll" aria-label="Auto-scroll play or pause">
+      <button id="scroll-play-btn" class="scroll-play-btn" title="Iniciar/Pausar Desplazamiento Automático" aria-label="Play o Pausa">
         ▶
       </button>
       <div class="flex items-center gap-2">
         <input type="range" id="scroll-speed-slider" class="scroll-slider" min="0.5" max="4.0" step="0.5" value="1.5">
         <span id="scroll-speed-label" class="scroll-speed-label">1.5x</span>
       </div>
-      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-slate-400 hover:text-white p-1 text-xs" title="Scroll to top">
-        ▲ Top
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="text-slate-400 hover:text-white p-1 text-xs" title="Volver al inicio">
+        ▲ Inicio
       </button>
     </div>
 
-    <!-- Floating Action Button (+ Add Song for Admin) -->
-    <button id="admin-fab-add" class="fab-btn" onclick="openSongEditorModal()" title="Add Song" style="display: none;">
+    <!-- Botón Flotante de Acción (+ Agregar Canción para Admin) -->
+    <button id="admin-fab-add" class="fab-btn" onclick="openSongEditorModal()" title="Agregar Canción" style="display: none;">
       +
     </button>
 
-    <!-- Bottom Navigation Bar (Mobile) -->
+    <!-- Barra de Navegación Inferior (Móvil) -->
     <nav class="bottom-nav">
       <button class="nav-item active" data-view="songs">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
-        <span>Songs</span>
+        <span>Canciones</span>
       </button>
       <button class="nav-item" data-view="setlists">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-        <span>Setlists</span>
+        <span>Repertorios</span>
       </button>
       <button class="nav-item" onclick="openQrShareModal()">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
-        <span>Share</span>
+        <span>Compartir</span>
+      </button>
+      <button class="nav-item" onclick="openCloudConfigModal()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+        <span>Nube</span>
       </button>
       <button class="nav-item" onclick="openAdminLoginModal()">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
@@ -311,33 +321,33 @@
     </nav>
   </div>
 
-  <!-- ==================== MODAL DIALOGS ==================== -->
+  <!-- ==================== DIÁLOGOS MODALES ==================== -->
 
-  <!-- 1. Admin PIN Modal -->
+  <!-- 1. Modal PIN Administrador -->
   <dialog id="admin-login-dialog">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold text-slate-100">Admin Mode Access</h3>
+      <h3 class="text-lg font-bold text-slate-100">Acceso de Administrador</h3>
       <button onclick="document.getElementById('admin-login-dialog').close()" class="text-slate-400 hover:text-white">✕</button>
     </div>
     <form onsubmit="submitAdminLogin(event)">
       <p class="text-xs text-slate-400 mb-4">
-        As Admin, you can add, edit, or delete songs and setlists in the cloud. Changes are immediately reflected on all connected phones.
+        Como Administrador puedes agregar, editar o eliminar canciones y repertorios en la nube. Los cambios se reflejan inmediatamente en todos los celulares conectados.
       </p>
       <div class="form-group">
-        <label for="admin-pin-input" class="form-label">Enter Admin PIN (Default: 1234)</label>
+        <label for="admin-pin-input" class="form-label">Ingresa el PIN de Administrador (Por defecto: 1234)</label>
         <input type="password" id="admin-pin-input" class="form-input text-center text-xl tracking-widest" placeholder="••••" required autofocus maxlength="10">
       </div>
       <div class="flex gap-2 mt-4">
-        <button type="submit" class="btn btn-primary flex-1">Unlock Admin</button>
-        <button type="button" onclick="logoutAdmin()" class="btn btn-secondary">Lock / Logout</button>
+        <button type="submit" class="btn btn-primary flex-1">Desbloquear Admin</button>
+        <button type="button" onclick="logoutAdmin()" class="btn btn-secondary">Cerrar Sesión</button>
       </div>
     </form>
   </dialog>
 
-  <!-- 2. Song Editor Modal (Add / Edit) with Live Preview -->
+  <!-- 2. Modal Editor de Canción (Agregar / Editar) con Vista Previa en Vivo -->
   <dialog id="song-editor-dialog" style="max-inline-size: 800px; inline-size: 95vw;">
     <div class="flex items-center justify-between mb-3">
-      <h3 id="editor-modal-title" class="text-lg font-bold text-slate-100">Add New Song</h3>
+      <h3 id="editor-modal-title" class="text-lg font-bold text-slate-100">Agregar Nueva Canción</h3>
       <button onclick="document.getElementById('song-editor-dialog').close()" class="text-slate-400 hover:text-white">✕</button>
     </div>
 
@@ -346,35 +356,35 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
         <div>
-          <label class="form-label">Song Title *</label>
-          <input type="text" id="editor-song-title" class="form-input" placeholder="e.g. Amazing Grace" required>
+          <label class="form-label">Título de la Canción *</label>
+          <input type="text" id="editor-song-title" class="form-input" placeholder="ej. De Música Ligera" required>
         </div>
         <div>
-          <label class="form-label">Author / Artist</label>
-          <input type="text" id="editor-song-artist" class="form-input" placeholder="e.g. John Newton">
+          <label class="form-label">Autor / Artista</label>
+          <input type="text" id="editor-song-artist" class="form-input" placeholder="ej. Soda Stereo">
         </div>
       </div>
 
       <div class="grid grid-cols-3 gap-2 mb-3">
         <div>
-          <label class="form-label">Original Key</label>
+          <label class="form-label">Tono Original</label>
           <select id="editor-song-key" class="form-select">
-            <option value="C">C</option>
+            <option value="C">C (Do)</option>
             <option value="C#">C# / Db</option>
-            <option value="D">D</option>
+            <option value="D">D (Re)</option>
             <option value="Eb">Eb / D#</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
+            <option value="E">E (Mi)</option>
+            <option value="F">F (Fa)</option>
             <option value="F#">F# / Gb</option>
-            <option value="G" selected>G</option>
+            <option value="G" selected>G (Sol)</option>
             <option value="Ab">Ab / G#</option>
-            <option value="A">A</option>
+            <option value="A">A (La)</option>
             <option value="Bb">Bb / A#</option>
-            <option value="B">B</option>
-            <option value="Am">Am</option>
-            <option value="Em">Em</option>
-            <option value="Bm">Bm</option>
-            <option value="Dm">Dm</option>
+            <option value="B">B (Si)</option>
+            <option value="Am">Am (La menor)</option>
+            <option value="Em">Em (Mi menor)</option>
+            <option value="Bm">Bm (Si menor)</option>
+            <option value="Dm">Dm (Re menor)</option>
           </select>
         </div>
         <div>
@@ -382,21 +392,21 @@
           <input type="number" id="editor-song-tempo" class="form-input" value="120" min="30" max="300">
         </div>
         <div>
-          <label class="form-label">Time Signature</label>
+          <label class="form-label">Compás</label>
           <input type="text" id="editor-song-time" class="form-input" value="4/4" placeholder="4/4, 3/4, 6/8">
         </div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Tags / Genre (comma separated)</label>
-        <input type="text" id="editor-song-tags" class="form-input" placeholder="Worship, Acoustic, Rock, Latin">
+        <label class="form-label">Etiquetas / Género (separadas por comas)</label>
+        <input type="text" id="editor-song-tags" class="form-input" placeholder="Rock, Alabanza, Acústico, Balada">
       </div>
 
-      <!-- ChordPro Helper Insertion Bar -->
+      <!-- Barra de Ayuda para Insertar Acordes Rápidos -->
       <div class="mb-2">
         <div class="flex items-center justify-between mb-1">
-          <label class="form-label mb-0">Lyrics & Chords (ChordPro or 2-line format)</label>
-          <span class="text-xs text-slate-400">Click to insert chords or sections:</span>
+          <label class="form-label mb-0">Letra y Acordes (Formato ChordPro o 2 líneas)</label>
+          <span class="text-xs text-slate-400">Clic para insertar acordes o secciones:</span>
         </div>
         <div class="flex flex-wrap gap-1 p-2 bg-slate-900 rounded border border-slate-700/60 mb-2">
           <button type="button" onclick="insertChordToEditor('[G]')" class="text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold px-2 py-0.5 rounded">[G]</button>
@@ -405,89 +415,122 @@
           <button type="button" onclick="insertChordToEditor('[Em]')" class="text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold px-2 py-0.5 rounded">[Em]</button>
           <button type="button" onclick="insertChordToEditor('[Am]')" class="text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold px-2 py-0.5 rounded">[Am]</button>
           <button type="button" onclick="insertChordToEditor('[F]')" class="text-xs bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 font-bold px-2 py-0.5 rounded">[F]</button>
-          <button type="button" onclick="insertChordToEditor('\n[Verse 1]\n')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 font-bold px-2 py-0.5 rounded">[Verse]</button>
-          <button type="button" onclick="insertChordToEditor('\n[Chorus]\n')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 font-bold px-2 py-0.5 rounded">[Chorus]</button>
-          <button type="button" onclick="insertChordToEditor('\n[Bridge]\n')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 font-bold px-2 py-0.5 rounded">[Bridge]</button>
+          <button type="button" onclick="insertChordToEditor('\n[Verso 1]\n')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 font-bold px-2 py-0.5 rounded">[Verso]</button>
+          <button type="button" onclick="insertChordToEditor('\n[Coro]\n')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 font-bold px-2 py-0.5 rounded">[Coro]</button>
+          <button type="button" onclick="insertChordToEditor('\n[Puente]\n')" class="text-xs bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-300 font-bold px-2 py-0.5 rounded">[Puente]</button>
         </div>
-        <textarea id="editor-song-content" class="form-textarea font-mono text-sm" rows="8" placeholder="[G]Amazing grace, how [C]sweet the [G]sound..."></textarea>
+        <textarea id="editor-song-content" class="form-textarea font-mono text-sm" rows="8" placeholder="[G]Ella durmió al [C]calor de las [G]masas..."></textarea>
       </div>
 
-      <!-- Live Preview Accordion/Box -->
+      <!-- Vista Previa en Vivo -->
       <div class="mb-4">
-        <label class="form-label text-xs text-amber-400 font-bold uppercase tracking-wider">Live Chords Preview</label>
+        <label class="form-label text-xs text-amber-400 font-bold uppercase tracking-wider">Vista Previa en Vivo</label>
         <div id="editor-live-preview" class="p-3 bg-slate-900/80 rounded border border-slate-700 max-h-40 overflow-y-auto text-xs font-mono">
-          <!-- Rendered in real-time -->
+          <!-- Renderizado en tiempo real -->
         </div>
       </div>
 
       <div class="flex gap-2">
-        <button type="submit" class="btn btn-primary flex-1">Save & Publish to Everyone</button>
-        <button type="button" onclick="document.getElementById('song-editor-dialog').close()" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary flex-1">Guardar y Publicar a Todos</button>
+        <button type="button" onclick="document.getElementById('song-editor-dialog').close()" class="btn btn-secondary">Cancelar</button>
       </div>
     </form>
   </dialog>
 
-  <!-- 3. Guitar Chord Diagram Modal -->
+  <!-- 3. Modal Diagrama de Acorde de Guitarra -->
   <dialog id="chord-diagram-dialog">
     <div class="flex items-center justify-between mb-2">
-      <h3 class="text-sm font-bold text-slate-300">Guitar Voicing</h3>
+      <h3 class="text-sm font-bold text-slate-300">Digitación en Guitarra</h3>
       <button onclick="document.getElementById('chord-diagram-dialog').close()" class="text-slate-400 hover:text-white">✕</button>
     </div>
     <div id="chord-diagram-display" class="flex justify-center p-2">
-      <!-- SVG generated by chords.js -->
+      <!-- SVG generado por chords.js -->
     </div>
-    <p class="text-xs text-center text-slate-500 mt-2">Tap anywhere outside to close</p>
+    <p class="text-xs text-center text-slate-500 mt-2">Toca afuera para cerrar</p>
   </dialog>
 
-  <!-- 4. QR Code & Phone Pairing Modal -->
+  <!-- 4. Modal Código QR y Conexión de Celular -->
   <dialog id="qr-share-dialog" style="max-inline-size: 420px; inline-size: 92vw;">
     <div class="flex items-center justify-between mb-3">
-      <h3 class="text-lg font-bold text-slate-100">📱 Open on Android Phone</h3>
+      <h3 class="text-lg font-bold text-slate-100">📱 Abrir en Celular Android</h3>
       <button onclick="document.getElementById('qr-share-dialog').close()" class="text-slate-400 hover:text-white">✕</button>
     </div>
     <p class="text-xs text-slate-300 mb-4">
-      Point your Android camera or QR scanner at this code to open the app. Then tap <strong>"Install App"</strong> to save it directly to your phone!
+      Apunta la cámara de tu celular a este código para abrir la app. Luego presiona <strong>"Instalar App"</strong> para tenerla instalada en tu teléfono como una aplicación nativa.
     </p>
     <div class="bg-white p-4 rounded-xl flex justify-center shadow-inner mb-4">
-      <img id="qr-code-image" src="" alt="QR Code" class="w-56 h-56 object-contain">
+      <img id="qr-code-image" src="" alt="Código QR" class="w-56 h-56 object-contain">
     </div>
     <div class="bg-slate-800 p-2.5 rounded-lg border border-slate-700 flex items-center justify-between mb-4">
       <a id="qr-url-text" href="#" target="_blank" class="text-xs text-cyan-400 underline font-mono truncate mr-2"></a>
-      <button onclick="navigator.clipboard.writeText(document.getElementById('qr-url-text').textContent); showToast('Link copied to clipboard!', 'success');" class="btn btn-secondary text-xs py-1 px-2 shrink-0">
-        Copy Link
+      <button onclick="navigator.clipboard.writeText(document.getElementById('qr-url-text').textContent); showToast('¡Enlace copiado al portapapeles!', 'success');" class="btn btn-secondary text-xs py-1 px-2 shrink-0">
+        Copiar Enlace
       </button>
     </div>
     <div class="text-xs text-slate-400 space-y-1">
-      <p>💡 <strong>Band Sync:</strong> When you add songs as Admin, everyone connected to this server receives the update automatically!</p>
+      <p>💡 <strong>Sincronización en Vivo:</strong> Cuando agregas canciones como Admin, todos los músicos conectados reciben la actualización automáticamente.</p>
     </div>
   </dialog>
 
-  <!-- 5. Create Setlist Modal -->
+  <!-- 5. Modal Crear Repertorio -->
   <dialog id="setlist-editor-dialog">
     <div class="flex items-center justify-between mb-3">
-      <h3 class="text-lg font-bold text-slate-100">Create New Setlist</h3>
+      <h3 class="text-lg font-bold text-slate-100">Crear Nuevo Repertorio</h3>
       <button onclick="document.getElementById('setlist-editor-dialog').close()" class="text-slate-400 hover:text-white">✕</button>
     </div>
     <form onsubmit="saveSetlistFromEditor(event)">
       <div class="form-group">
-        <label class="form-label">Setlist Name *</label>
-        <input type="text" id="editor-setlist-name" class="form-input" placeholder="e.g. Sunday Service - Oct 25" required>
+        <label class="form-label">Nombre del Repertorio *</label>
+        <input type="text" id="editor-setlist-name" class="form-input" placeholder="ej. Ensayo Domingo - 25 Oct" required>
       </div>
       <div class="form-group">
-        <label class="form-label">Description / Venue</label>
-        <input type="text" id="editor-setlist-desc" class="form-input" placeholder="e.g. Morning 10:00 AM worship set">
+        <label class="form-label">Descripción / Lugar</label>
+        <input type="text" id="editor-setlist-desc" class="form-input" placeholder="ej. Lista de canciones para la reunión">
       </div>
       <div class="form-group">
-        <label class="form-label">Select Songs for this Setlist</label>
+        <label class="form-label">Seleccionar Canciones</label>
         <div id="setlist-songs-selector" class="max-h-44 overflow-y-auto bg-slate-900 p-2 rounded border border-slate-700 space-y-1">
-          <!-- Populated by app.js -->
+          <!-- Populado por app.js -->
         </div>
       </div>
       <div class="flex gap-2 mt-4">
-        <button type="submit" class="btn btn-primary flex-1">Create Setlist</button>
-        <button type="button" onclick="document.getElementById('setlist-editor-dialog').close()" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary flex-1">Crear Repertorio</button>
+        <button type="button" onclick="document.getElementById('setlist-editor-dialog').close()" class="btn btn-secondary">Cancelar</button>
       </div>
     </form>
+  </dialog>
+
+  <!-- 6. Modal Configurar Nube (Render.com) -->
+  <dialog id="render-cloud-dialog" style="max-inline-size: 460px; inline-size: 92vw;">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-bold text-slate-100">🌐 Conectar Servidor en la Nube (Render.com)</h3>
+      <button onclick="document.getElementById('render-cloud-dialog').close()" class="text-slate-400 hover:text-white">✕</button>
+    </div>
+    <p class="text-xs text-slate-300 mb-3">
+      Conecta tu aplicación (o APK compilada) a tu servidor desplegado en <strong>render.com</strong> para sincronizar canciones en tiempo real por internet con toda tu banda:
+    </p>
+    
+    <div class="form-group">
+      <label class="form-label">URL de tu servicio en Render</label>
+      <input type="url" id="cloud-url-input" class="form-input font-mono text-sm" placeholder="https://mi-chordmaster.onrender.com">
+      <p class="text-xs text-slate-500 mt-1">Pega la URL que te asigna Render.com al desplegar tu servicio.</p>
+    </div>
+
+    <div id="cloud-test-feedback" class="text-xs font-semibold p-2.5 rounded-lg mb-3 hidden"></div>
+
+    <div class="flex flex-col gap-2">
+      <button type="button" onclick="testAndSaveCloudUrl()" class="btn btn-primary w-full">
+        ⚡ Probar y Guardar Conexión
+      </button>
+      <div class="flex gap-2">
+        <button type="button" onclick="resetToLocalServer()" class="btn btn-secondary flex-1 text-xs">
+          Usar Servidor Local
+        </button>
+        <button type="button" onclick="document.getElementById('render-cloud-dialog').close()" class="btn btn-secondary text-xs">
+          Cerrar
+        </button>
+      </div>
+    </div>
   </dialog>
 
   <!-- Scripts -->

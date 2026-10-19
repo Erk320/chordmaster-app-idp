@@ -23,8 +23,8 @@ const NOTE_TO_INDEX = {
   'B': 11, 'CB': 11, 'Cb': 11
 };
 
-// Section headers detector
-const SECTION_REGEX = /^\s*\[(Verse|Chorus|Intro|Outro|Bridge|Pre-Chorus|Solo|Interlude|Tag|Ending|Instrumental)[^\]]*\]\s*$/i;
+// Section headers detector (English & Spanish)
+const SECTION_REGEX = /^\s*\[(Verse|Verso|Chorus|Coro|Intro|Introducción|Outro|Final|Bridge|Puente|Pre-Chorus|Pre-Coro|Solo|Interlude|Interludio|Tag|Ending|Instrumental)[^\]]*\]\s*$/i;
 
 // Regex to capture root note, optional quality, and optional slash bass
 const CHORD_REGEX = /^([A-G][#b]?)([^/]*)(?:\/([A-G][#b]?))?$/;
@@ -63,7 +63,7 @@ function transposeChord(chordStr, semitones, preferFlats = false) {
  * Parses song content (ChordPro or 2-line chord/lyric) and returns an HTML-ready rendering
  */
 function renderSongHTML(content, semitones = 0, currentKey = 'C') {
-  if (!content) return '<p class="text-slate-400 italic">No lyrics or chords provided.</p>';
+  if (!content) return '<p class="text-slate-400 italic">No se proporcionaron acordes ni letras.</p>';
 
   const preferFlats = FLAT_KEYS.includes(currentKey);
   const rawLines = content.split('\n');
@@ -312,7 +312,7 @@ function generateChordSvg(chordName) {
   }
 
   if (!pattern) {
-    return `<div class="p-4 text-center text-sm text-slate-400">Diagram for <strong>${escapeHtml(cleanName)}</strong> available in manual voicing.</div>`;
+    return `<div class="p-4 text-center text-sm text-slate-400">Diagrama para <strong>${escapeHtml(cleanName)}</strong> disponible en digitación manual.</div>`;
   }
 
   const width = 160;

@@ -4,147 +4,37 @@ const path = require('path');
 const DB_FILE = path.join(__dirname, 'data.json');
 const BACKUP_FILE = path.join(__dirname, 'data.backup.json');
 
-// Initial starter songs with rich chords, metadata, and sections
+// Canciones iniciales en español con acordes y secciones completas
 const STARTER_SONGS = [
   {
     id: "song-1",
-    title: "Amazing Grace",
-    artist: "John Newton",
-    key: "G",
-    tempo: 75,
-    timeSignature: "3/4",
-    tags: ["Hymn", "Acoustic", "Traditional"],
-    notes: "Acoustic fingerpicking intro. Build dynamics in verse 3.",
-    content: `[Verse 1]
-[G]Amazing grace, how [C]sweet the [G]sound
-That saved a wretch like [D]me
-I [G]once was lost, but [C]now am [G]found
-Was blind, but [D]now I [G]see
-
-[Verse 2]
-'Twas [G]grace that taught my [C]heart to [G]fear
-And grace my fears [D]relieved
-How [G]precious did that [C]grace [G]appear
-The hour I [D]first [G]believed
-
-[Chorus]
-My [C]chains are gone, I've been [G]set free
-My [C]God, my Savior has [G]ransomed [D]me
-And [C]like a flood, His [G]mercy [Em]reigns
-Un-[Am]ending love, a-[D]mazing [G]grace
-
-[Verse 3]
-The [G]Lord has promised [C]good to [G]me
-His word my hope [D]secures
-He [G]will my shield and [C]portion [G]be
-As long as [D]life [G]endures`,
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: "song-2",
-    title: "Stand By Me",
-    artist: "Ben E. King",
-    key: "A",
-    tempo: 118,
-    timeSignature: "4/4",
-    tags: ["Soul", "Classic", "Pop"],
-    notes: "Bass line: A - F#m - D - E. Electric guitar light palm muting.",
-    content: `[Intro]
-[A]    [F#m]    [D]   [E]   [A]
-
-[Verse 1]
-When the [A]night has come
-And the [F#m]land is dark
-And the [D]moon is the [E]only light we'll [A]see
-No, I [A]won't be afraid
-Oh, I [F#m]won't be afraid
-Just as [D]long as you [E]stand, stand by [A]me
-
-[Chorus]
-So darling, darling, [A]stand by me
-Oh, [F#m]stand by me
-Oh, [D]stand, [E]stand by me, [A]stand by me
-
-[Verse 2]
-If the [A]sky that we look upon
-[F#m]Should tumble and fall
-Or the [D]mountain should [E]crumble to the [A]sea
-I won't [A]cry, I won't cry
-No, I [F#m]won't shed a tear
-Just as [D]long as you [E]stand, stand by [A]me
-
-[Chorus]
-And darling, darling, [A]stand by me
-Oh, [F#m]stand by me
-Oh, [D]stand, [E]stand by me, [A]stand by me`,
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: "song-3",
-    title: "Hallelujah",
-    artist: "Leonard Cohen",
-    key: "C",
-    tempo: 56,
-    timeSignature: "6/8",
-    tags: ["Acoustic", "Ballad", "Folk"],
-    notes: "Arpeggiate chords smoothly: 1-2-3-4-5-6 in 6/8 time.",
-    content: `[Intro]
-[C]   [Am]   [C]   [Am]
-
-[Verse 1]
-I've [C]heard there was a [Am]secret chord
-That [C]David played, and it [Am]pleased the Lord
-But [F]you don't really [G]care for music, [C]do you? [G]
-It [C]goes like this, the [F]fourth, the [G]fifth
-The [Am]minor fall, the [F]major lift
-The [G]baffled king com-[E7]posing Halle-[Am]lujah
-
-[Chorus]
-Halle-[F]lujah, Halle-[Am]lujah
-Halle-[F]lujah, Halle-[C]lu---[G]--[C]jah
-
-[Verse 2]
-Your [C]faith was strong but you [Am]needed proof
-You [C]saw her bathing [Am]on the roof
-Her [F]beauty and the [G]moonlight over-[C]threw you [G]
-She [C]tied you to a [F]kitchen [G]chair
-She [Am]broke your throne, and she [F]cut your hair
-And [G]from your lips she [E7]drew the Halle-[Am]lujah
-
-[Chorus]
-Halle-[F]lujah, Halle-[Am]lujah
-Halle-[F]lujah, Halle-[C]lu---[G]--[C]jah`,
-    updatedAt: new Date().toISOString()
-  },
-  {
-    id: "song-4",
     title: "De Música Ligera",
     artist: "Soda Stereo",
     key: "Bm",
     tempo: 126,
     timeSignature: "4/4",
-    tags: ["Rock", "Latin", "Spanish"],
-    notes: "Main iconic riff: Bm - G - D - A. Drums drive with heavy hi-hat in choruses.",
+    tags: ["Rock", "Latino", "Clásico"],
+    notes: "Riff principal: Bm - G - D - A. Batería entra con fuerza en los coros.",
     content: `[Intro]
 [Bm]   [G]   [D]   [A]  (x4)
 
-[Verse 1]
+[Verso 1]
 [Bm]Ella durmió [G]al calor de las [D]masas [A]
 [Bm]Y yo desperté [G]queriendo so-[D]ñarla [A]
 [Bm]Algún tiempo atrás [G]pensé en escri-[D]birle [A]
 [Bm]Que nunca sorteé [G]las trampas del [D]amor [A]
 
-[Chorus]
+[Coro]
 De a-[Bm]quel amor [G]
 De [D]música li-[A]gera
 Nada [Bm]nos libra [G]
 Nada [D]más que-[A]da
 
-[Verse 2]
+[Verso 2]
 [Bm]No le enviaré [G]cenizas de [D]rosas [A]
 [Bm]Ni pienso evitar [G]un roce se-[D]creto [A]
 
-[Chorus]
+[Coro]
 De a-[Bm]quel amor [G]
 De [D]música li-[A]gera
 Nada [Bm]nos libra [G]
@@ -156,34 +46,131 @@ Nada [D]más que-[A]da
     updatedAt: new Date().toISOString()
   },
   {
-    id: "song-5",
-    title: "Way Maker",
-    artist: "Sinach",
-    key: "E",
-    tempo: 68,
+    id: "song-2",
+    title: "Cuán Grande Es Dios",
+    artist: "En Espiritu y En Verdad",
+    key: "G",
+    tempo: 76,
     timeSignature: "4/4",
-    tags: ["Worship", "Contemporary"],
-    notes: "Capo 2 for guitar in D if preferred. Pad and piano start verse 1 soft.",
+    tags: ["Adoración", "Acústico", "Alabanza"],
+    notes: "Pad suave en verso 1. Subir intensidad en el puente y coro final.",
     content: `[Intro]
-[E]   [B]   [C#m]   [A]
+[G]    [Em7]    [C2]    [D]
 
-[Verse 1]
-You are [E]here, moving in our [B]midst
-I worship [C#m]You, I worship [A]You
-You are [E]here, working in this [B]place
-I worship [C#m]You, I worship [A]You
+[Verso 1]
+El [G]esplendor de un Rey, vestido en [Em7]majestad
+La tierra alegre [C2]está, la tierra alegre está
+Se [G]cubre de su luz, las sombras [Em7]huyen ya
+Y tiemblan a su [C2]voz, y tiemblan a su voz
 
-[Chorus]
-[E]Way Maker, Miracle Worker, [B]Promise Keeper
-Light in the darkness, [C#m]my God, that is who You [A]are
-[E]Way Maker, Miracle Worker, [B]Promise Keeper
-Light in the darkness, [C#m]my God, that is who You [A]are
+[Coro]
+Cuán [G]grande es Dios, cántale
+Cuán [Em7]grande es Dios, y todos lo verán
+Cuán [C2]grande, cuán [D]grande es [G]Dios
 
-[Verse 2]
-You are [E]here, touching every [B]heart
-I worship [C#m]You, I worship [A]You
-You are [E]here, healing every [B]heart
-I worship [C#m]You, I worship [A]You`,
+[Verso 2]
+Con [G]fuerza y edad, sus años [Em7]durarán
+Principio y el [C2]fin, principio y el fin
+La [G]Trinidad en Dios, el Padre, [Em7]Hijo, Espíritu
+Cordero y el [C2]León, Cordero y el León
+
+[Coro]
+Cuán [G]grande es Dios, cántale
+Cuán [Em7]grande es Dios, y todos lo verán
+Cuán [C2]grande, cuán [D]grande es [G]Dios
+
+[Puente]
+Tu [G]nombre sobre todo es
+Eres [Em7]digno de alabar
+Y mi [C2]ser dirá: Cuán [D]grande es [G]Dios`,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "song-3",
+    title: "Flaca",
+    artist: "Andrés Calamaro",
+    key: "G",
+    tempo: 114,
+    timeSignature: "4/4",
+    tags: ["Pop", "Rock", "Acústico"],
+    notes: "Progresión: G - B7 - Em - C - G - D - G - D. Guitarra acústica con rasgueo constante.",
+    content: `[Intro]
+[G]   [B7]   [Em]   [C]   [G]   [D]   [G]   [D]
+
+[Verso 1]
+[G]Flaca, no me [B7]claves tus puñales
+Por la [Em]espalda, tan pro-[C]fundo
+No me [G]duelen, no me [D]hacen más daño, [G]no [D]
+[G]El día en el que [B7]te vayas
+Me voy a [Em]emborrachar al [C]bar
+Y voy a bus-[G]carme una que se [D]parezca a [G]ti [D]
+
+[Coro]
+[G]Aunque casi [B7]te confieso que también
+He [Em]sido un perro com-[C]pañero
+Un [G]perro fiel que [D]dormía a tus [G]pies [D]
+
+[Verso 2]
+[G]Flaca, no me [B7]claves tus puñales
+Por la [Em]espalda, tan pro-[C]fundo
+No me [G]duelen, no me [D]hacen más daño, [G]no [D]`,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "song-4",
+    title: "Eres Todopoderoso",
+    artist: "Danilo Montero",
+    key: "Bm",
+    tempo: 130,
+    timeSignature: "4/4",
+    tags: ["Alabanza", "Latino", "Júbilo"],
+    notes: "Ritmo rápido y alegre. Bm - G - D - A. Bajo marcando octavas.",
+    content: `[Intro]
+[Bm]   [G]   [D]   [A] (x2)
+
+[Verso 1]
+La [Bm]única razón de mi [G]adoración
+Eres [D]Tú mi Jesús [A]
+El [Bm]único motivo para [G]vivir
+Eres [D]Tú mi Señor [A]
+
+[Verso 2]
+Mi [Bm]única verdad está [G]en Ti
+Eres mi luz y mi [D]salvación [A]
+Mi [Bm]único amor eres [G]Tú Señor
+Y por [D]siempre te alabaré [A]
+
+[Coro]
+Tú eres [Bm]todopoderoso
+Eres [G]grande y majestuoso
+Eres [D]fuerte, invencible
+Y no [A]hay nadie como Tú`,
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "song-5",
+    title: "La Bamba",
+    artist: "Los Lobos / Ritchie Valens",
+    key: "C",
+    tempo: 152,
+    timeSignature: "4/4",
+    tags: ["Rock & Roll", "Latino", "Fiesta"],
+    notes: "Progresión clásica de 3 acordes: C - F - G. Solo de guitarra en la escala de Do.",
+    content: `[Intro]
+[C]   [F]   [G]   (x4)
+
+[Verso 1]
+Para bailar la [C]bamba [F]  [G]
+Para bailar la [C]bamba se nece-[F]sita una poca de [G]gracia
+Una poca de [C]gracia pa' mí, pa' [F]ti, ay arriba y a-[G]rriba
+Ay arriba y a-[C]rriba, por ti se-[F]ré, por ti se-[G]ré, por ti seré
+
+[Coro]
+Yo no soy ma-[C]rinero [F]  [G]
+Yo no soy ma-[C]rinero, soy capi-[F]tán, soy capi-[G]tán
+Soy capi-[C]tán! [F]  [G]
+Bamba, [C]bamba, [F]  [G]
+Bamba, [C]bamba, [F]  [G]`,
     updatedAt: new Date().toISOString()
   }
 ];
@@ -191,17 +178,17 @@ I worship [C#m]You, I worship [A]You`,
 const STARTER_SETLISTS = [
   {
     id: "setlist-1",
-    name: "Sunday Rehearsal & Live",
-    description: "Main weekend set for full band",
-    songIds: ["song-5", "song-1", "song-3"],
+    name: "Servicio Domingo / Ensayo en Vivo",
+    description: "Repertorio principal para la banda completa",
+    songIds: ["song-2", "song-4", "song-1"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: "setlist-2",
-    name: "Acoustic Night",
-    description: "Unplugged acoustic set with guitar and vocal",
-    songIds: ["song-2", "song-4", "song-1"],
+    name: "Noche Acústica & Concierto",
+    description: "Set acústico con guitarras y percusión suave",
+    songIds: ["song-3", "song-1", "song-5"],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -212,7 +199,7 @@ class Database {
     this.data = {
       version: 1,
       lastModified: new Date().toISOString(),
-      adminPin: "1234", // Default admin PIN, easily changed in UI or env
+      adminPin: "1234",
       songs: [],
       setlists: []
     };
@@ -224,7 +211,6 @@ class Database {
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
         this.data = JSON.parse(raw);
-        // Ensure defaults if empty
         if (!this.data.songs || this.data.songs.length === 0) {
           this.data.songs = STARTER_SONGS;
           this.data.setlists = STARTER_SETLISTS;
@@ -236,7 +222,7 @@ class Database {
         this.save();
       }
     } catch (err) {
-      console.error('Error loading database, resetting to starters:', err);
+      console.error('Error al cargar la base de datos, reiniciando valores iniciales:', err);
       this.data.songs = STARTER_SONGS;
       this.data.setlists = STARTER_SETLISTS;
       this.save();
@@ -249,16 +235,14 @@ class Database {
       this.data.lastModified = new Date().toISOString();
       const content = JSON.stringify(this.data, null, 2);
       fs.writeFileSync(DB_FILE, content, 'utf-8');
-      // Create backup periodically
       fs.writeFileSync(BACKUP_FILE, content, 'utf-8');
       return true;
     } catch (err) {
-      console.error('Failed to write database file:', err);
+      console.error('Fallo al guardar archivo de base de datos:', err);
       return false;
     }
   }
 
-  // --- SONGS ---
   getAllSongs() {
     return this.data.songs;
   }
@@ -285,7 +269,7 @@ class Database {
     this.data.songs[idx] = {
       ...this.data.songs[idx],
       ...updates,
-      id, // protect id
+      id,
       updatedAt: new Date().toISOString()
     };
     this.save();
@@ -295,7 +279,6 @@ class Database {
   deleteSong(id) {
     const prevLen = this.data.songs.length;
     this.data.songs = this.data.songs.filter(s => s.id !== id);
-    // Remove from setlists too
     this.data.setlists.forEach(setlist => {
       setlist.songIds = setlist.songIds.filter(sId => sId !== id);
     });
@@ -303,7 +286,6 @@ class Database {
     return this.data.songs.length < prevLen;
   }
 
-  // --- SETLISTS ---
   getAllSetlists() {
     return this.data.setlists;
   }
@@ -345,7 +327,6 @@ class Database {
     return this.data.setlists.length < prevLen;
   }
 
-  // --- ADMIN & SYNC ---
   verifyAdminPin(pin) {
     const currentPin = process.env.ADMIN_PIN || this.data.adminPin || "1234";
     return String(pin) === String(currentPin);

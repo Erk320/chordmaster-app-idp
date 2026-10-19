@@ -1,14 +1,14 @@
 /**
- * ChordMaster Live - REST API Client with Offline Caching & Auto-Sync
+ * ChordMaster Live - Cliente API REST con Soporte para Render.com y Modo Offline
  */
 
-const API_BASE = '/api';
 const STORAGE_KEYS = {
   SONGS: 'chordmaster_songs_cache',
   SETLISTS: 'chordmaster_setlists_cache',
   SYNC_INFO: 'chordmaster_sync_info',
   ADMIN_PIN: 'chordmaster_admin_pin',
   IS_ADMIN: 'chordmaster_is_admin',
+  CLOUD_URL: 'chordmaster_cloud_url',
   PERSONAL_NOTES_PREFIX: 'chordmaster_notes_'
 };
 
@@ -30,25 +30,71 @@ class ApiService {
       this.triggerOnlineStatus(false);
     });
 
-    // Start auto-sync checking every 8 seconds
+    // Iniciar verificación automática cada 8 segundos
     this.startPolling(8000);
   }
 
-  // --- ONLINE STATUS & SYNC SUBSCRIBERS ---
+  // Obtener URL base de la API (Render o local)
+  getApiBase() {
+    const customCloudUrl = localStorage.getItem(STORAGE_KEYS.CLOUD_URL);
+    if (customCloudUrl && customCloudUrl.trim()) {
+      let clean = customCloudUrl.trim().replace(/\/+$/, '');
+      return `${clean}/api`;
+    }
+    return '/api';
+  }
+
+  getCloudUrl() {
+    return localStorage.getItem(STORAGE_KEYS.CLOUD_URL) || '';
+  }
+
+  setCloudUrl(url) {
+    if (!url || !url.trim()) {
+      localStorage.removeItem(STORAGE_KEYS.CLOUD_URL);
+    } else {
+      let clean = url.trim().replace(/\/+$/, '');
+      if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+        clean = `https://${clean}`;
+      }
+      localStorage.setItem(STORAGE_KEYS.CLOUD_URL, clean);
+    }
+    return this.getApiBase();
+  }
+
+  async testConnection(url) {
+    let clean = url ? url.trim().replace(/\/+$/, '') : '';
+    if (clean && !clean.startsWith('http://') && !clean.startsWith('https://')) {
+      clean = `https://${clean}`;
+    }
+    const target = clean ? `${clean}/api/sync/status` : `${this.getApiBase()}/sync/status`;
+
+    try {
+      const res = await fetch(target, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        return { success: true, data };
+      }
+      return { success: false, error: `Error del servidor HTTP ${res.status}` };
+    } catch (err) {
+      return { success: false, error: err.message || 'No se pudo conectar con el servidor' };
+    }
+  }
+
+  // --- ESTADO EN LÍNEA & SUSCRIPCIÓN DE SINCRONIZACIÓN ---
   onSync(callback) {
     this.syncListeners.push(callback);
   }
 
   triggerSyncUpdate(syncInfo) {
     this.syncListeners.forEach(cb => {
-      try { cb(syncInfo); } catch (e) { console.error('Sync listener error:', e); }
+      try { cb(syncInfo); } catch (e) { console.error('Error en listener de sincronización:', e); }
     });
   }
 
   triggerOnlineStatus(isOnline) {
     const toast = document.getElementById('connection-status-toast');
     if (toast) {
-      toast.textContent = isOnline ? '🟢 Connected online' : '🟡 Offline mode (using local cache)';
+      toast.textContent = isOnline ? '🟢 Conectado en línea' : '🟡 Modo sin conexión (usando memoria local)';
       toast.className = `status-toast ${isOnline ? 'bg-emerald-600' : 'bg-amber-600'} text-white visible`;
       setTimeout(() => {
         toast.classList.remove('visible');
@@ -67,24 +113,24 @@ class ApiService {
 
   async checkSync() {
     try {
-      const res = await fetch(`${API_BASE}/sync/status`, { cache: 'no-store' });
+      const res = await fetch(`${this.getApiBase()}/sync/status`, { cache: 'no-store' });
       if (!res.ok) return;
       const status = await res.json();
       
       const storedVersion = localStorage.getItem(STORAGE_KEYS.SYNC_INFO);
       if (storedVersion && Number(storedVersion) !== status.version) {
-        console.log('🔄 Remote library update detected! Refreshing cache...');
+        console.log('🔄 ¡Cambio remoto detectado! Actualizando catálogo...');
         localStorage.setItem(STORAGE_KEYS.SYNC_INFO, status.version);
         this.triggerSyncUpdate(status);
       } else if (!storedVersion) {
         localStorage.setItem(STORAGE_KEYS.SYNC_INFO, status.version);
       }
     } catch (err) {
-      // Quiet fail on network hiccup
+      // Ignorar pequeños fallos de red
     }
   }
 
-  // --- ADMIN CREDENTIALS ---
+  // --- CREDENCIALES DE ADMINISTRADOR ---
   getStoredAdminPin() {
     return localStorage.getItem(STORAGE_KEYS.ADMIN_PIN) || '';
   }
@@ -104,7 +150,7 @@ class ApiService {
 
   async verifyAdmin(pin) {
     try {
-      const res = await fetch(`${API_BASE}/admin/verify`, {
+      const res = await fetch(`${this.getApiBase()}/admin/verify`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ pin })
@@ -114,43 +160,39 @@ class ApiService {
         this.setAdminState(true, pin);
         return { success: true };
       }
-      return { success: false, error: data.error || 'Invalid PIN' };
+      return { success: false, error: data.error || 'PIN de administrador incorrecto' };
     } catch (err) {
-      // Local fallback check
       if (pin === '1234') {
         this.setAdminState(true, pin);
         return { success: true, offline: true };
       }
-      return { success: false, error: 'Network error or invalid PIN' };
+      return { success: false, error: 'Error de red o PIN inválido' };
     }
   }
 
-  // --- SONGS ---
+  // --- CANCIONES ---
   async getSongs() {
     try {
-      const res = await fetch(`${API_BASE}/songs`);
+      const res = await fetch(`${this.getApiBase()}/songs`);
       if (res.ok) {
         const songs = await res.json();
         localStorage.setItem(STORAGE_KEYS.SONGS, JSON.stringify(songs));
         return songs;
       }
     } catch (err) {
-      console.warn('Network fetch failed, loading songs from offline cache');
+      console.warn('Fallo de red, cargando canciones desde caché local');
     }
 
-    // Fallback to cache
     const cached = localStorage.getItem(STORAGE_KEYS.SONGS);
     return cached ? JSON.parse(cached) : [];
   }
 
   async getSong(id) {
     try {
-      const res = await fetch(`${API_BASE}/songs/${id}`);
-      if (res.ok) {
-        return await res.json();
-      }
+      const res = await fetch(`${this.getApiBase()}/songs/${id}`);
+      if (res.ok) return await res.json();
     } catch (err) {
-      console.warn('Network fetch failed, reading song from cache');
+      console.warn('Fallo de red, buscando canción en memoria local');
     }
 
     const songs = await this.getSongs();
@@ -159,7 +201,7 @@ class ApiService {
 
   async createSong(songData) {
     const pin = this.getStoredAdminPin();
-    const res = await fetch(`${API_BASE}/songs`, {
+    const res = await fetch(`${this.getApiBase()}/songs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -169,14 +211,14 @@ class ApiService {
     });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error || 'Failed to create song');
+      throw new Error(err.error || 'No se pudo crear la canción');
     }
     return await res.json();
   }
 
   async updateSong(id, songData) {
     const pin = this.getStoredAdminPin();
-    const res = await fetch(`${API_BASE}/songs/${id}`, {
+    const res = await fetch(`${this.getApiBase()}/songs/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -186,14 +228,14 @@ class ApiService {
     });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error || 'Failed to update song');
+      throw new Error(err.error || 'No se pudo actualizar la canción');
     }
     return await res.json();
   }
 
   async deleteSong(id) {
     const pin = this.getStoredAdminPin();
-    const res = await fetch(`${API_BASE}/songs/${id}`, {
+    const res = await fetch(`${this.getApiBase()}/songs/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -203,22 +245,22 @@ class ApiService {
     });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error || 'Failed to delete song');
+      throw new Error(err.error || 'No se pudo eliminar la canción');
     }
     return await res.json();
   }
 
-  // --- SETLISTS ---
+  // --- REPERTORIOS (SETLISTS) ---
   async getSetlists() {
     try {
-      const res = await fetch(`${API_BASE}/setlists`);
+      const res = await fetch(`${this.getApiBase()}/setlists`);
       if (res.ok) {
         const setlists = await res.json();
         localStorage.setItem(STORAGE_KEYS.SETLISTS, JSON.stringify(setlists));
         return setlists;
       }
     } catch (err) {
-      console.warn('Network fetch failed, loading setlists from cache');
+      console.warn('Fallo de red, cargando repertorios desde caché local');
     }
 
     const cached = localStorage.getItem(STORAGE_KEYS.SETLISTS);
@@ -227,17 +269,16 @@ class ApiService {
 
   async getSetlist(id) {
     try {
-      const res = await fetch(`${API_BASE}/setlists/${id}`);
+      const res = await fetch(`${this.getApiBase()}/setlists/${id}`);
       if (res.ok) return await res.json();
     } catch (err) {
-      console.warn('Network fetch failed, reading setlist from cache');
+      console.warn('Fallo de red, buscando repertorio en caché local');
     }
 
     const setlists = await this.getSetlists();
     const found = setlists.find(sl => sl.id === id);
     if (!found) return null;
 
-    // Attach songs from cache
     const allSongs = await this.getSongs();
     const populated = (found.songIds || []).map(sId => allSongs.find(s => s.id === sId)).filter(Boolean);
     return { ...found, songs: populated };
@@ -245,7 +286,7 @@ class ApiService {
 
   async saveSetlist(setlistData) {
     const isNew = !setlistData.id || setlistData.id.startsWith('new-');
-    const url = isNew ? `${API_BASE}/setlists` : `${API_BASE}/setlists/${setlistData.id}`;
+    const url = isNew ? `${this.getApiBase()}/setlists` : `${this.getApiBase()}/setlists/${setlistData.id}`;
     const method = isNew ? 'POST' : 'PUT';
 
     const res = await fetch(url, {
@@ -256,23 +297,23 @@ class ApiService {
 
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error || 'Failed to save setlist');
+      throw new Error(err.error || 'No se pudo guardar el repertorio');
     }
     return await res.json();
   }
 
   async deleteSetlist(id) {
-    const res = await fetch(`${API_BASE}/setlists/${id}`, {
+    const res = await fetch(`${this.getApiBase()}/setlists/${id}`, {
       method: 'DELETE'
     });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.error || 'Failed to delete setlist');
+      throw new Error(err.error || 'No se pudo eliminar el repertorio');
     }
     return await res.json();
   }
 
-  // --- INDEPENDENT PERSONAL NOTES PER SONG ---
+  // --- NOTAS PERSONALES INDEPENDIENTES POR CANCIÓN ---
   getPersonalNotes(songId) {
     return localStorage.getItem(`${STORAGE_KEYS.PERSONAL_NOTES_PREFIX}${songId}`) || '';
   }
@@ -282,14 +323,13 @@ class ApiService {
     return true;
   }
 
-  // --- NETWORK & QR CODE ---
+  // --- INFORMACIÓN DE RED Y QR ---
   async getNetworkInfo() {
     try {
-      const res = await fetch(`${API_BASE}/network-info`);
+      const res = await fetch(`${this.getApiBase()}/network-info`);
       if (res.ok) return await res.json();
-    } catch (err) {
-      // ignore
-    }
+    } catch (err) {}
+
     return {
       localIp: 'localhost',
       port: 3000,
@@ -300,7 +340,7 @@ class ApiService {
 
   async resetToStarters() {
     const pin = this.getStoredAdminPin();
-    const res = await fetch(`${API_BASE}/admin/reset-starter`, {
+    const res = await fetch(`${this.getApiBase()}/admin/reset-starter`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
