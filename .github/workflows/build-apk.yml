@@ -9,6 +9,8 @@ jobs:
   build:
     name: Compilar APK de ChordMaster
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Descargar Código
