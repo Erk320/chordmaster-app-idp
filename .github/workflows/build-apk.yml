@@ -23,7 +23,7 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
-      - name: Configurar Node.js
+      - name: Configurar Node.js 22 LTS
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -36,23 +36,29 @@ jobs:
         run: |
           npx cap sync android
 
+      - name: Instalar Android SDK 36 y Aceptar Licencias
+        run: |
+          SDKMANAGER=$(which sdkmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager")
+          if [ ! -x "$SDKMANAGER" ]; then
+            SDKMANAGER=$(find $ANDROID_HOME/cmdline-tools -name sdkmanager -perm -u+x 2>/dev/null | head -n 1)
+          fi
+          echo "sdkmanager ubicado en: $SDKMANAGER"
+          yes | "$SDKMANAGER" --licenses || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0" "platform-tools" || true
+
       - name: Dar permisos de ejecución a Gradlew
         run: chmod +x android/gradlew
-
-      - name: Aceptar licencias de Android SDK
-        run: |
-          yes | sdkmanager --licenses || true
 
       - name: Compilar APK Android (Debug)
         run: |
           cd android
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace --no-daemon
 
       - name: Subir APK como Artefacto Descargable
         uses: actions/upload-artifact@v4
         with:
           name: ChordMaster-Live-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/*.apk
 
       - name: Crear Release con APK para Descarga Directa
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
@@ -62,12 +68,13 @@ jobs:
           name: "ChordMaster Live v1.0.${{ github.run_number }} (APK)"
           body: |
             ## 📱 Descarga de la Aplicación Android (APK)
-            Descarga e instala el archivo **app-debug.apk** en tu teléfono Android.
+            Descarga e instala el archivo APK en tu teléfono Android.
             
             - Idioma: Español
             - Conexión con tu servidor Render.com
             - Acordes, Letras, Repertorios y Modo Escenario en vivo
           files: |
-            android/app/build/outputs/apk/debug/app-debug.apk
+            android/app/build/outputs/apk/debug/*.apk
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
